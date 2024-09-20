@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import um.edu.ar.ui.theme.BackgoundLightBlue
 import um.edu.ar.ui.theme.BackgroundColorBlue
+import um.edu.ar.ui.theme.DarkBlue
 import um.edu.ar.ui.theme.LightBlue
 import um.edu.ar.ui.theme.MegaLightBlue
 import webtechdevices.composeapp.generated.resources.Res
@@ -68,6 +69,10 @@ fun LoginContent() {
             NameCompany()
             Spacer(modifier = Modifier.padding(8.dp))
             FieldsToComplete()
+            Spacer(modifier = Modifier.padding(8.dp))
+            ForgotPasswordLink()
+            Spacer(modifier = Modifier.padding(8.dp))
+            LoginButton()
         }
     }
 }
@@ -82,7 +87,6 @@ fun Title(modifier: Modifier) {
     )
 }
 
-
 @Composable
 fun LogoImageCompany() {
     Image(
@@ -91,6 +95,7 @@ fun LogoImageCompany() {
         Modifier.size(130.dp)
     )
 }
+
 
 @Composable
 fun NameCompany() {
@@ -114,7 +119,6 @@ fun FieldsToComplete() {
     }
 }
 
-
 @Composable
 fun EmailField() {
     TextField(
@@ -126,11 +130,13 @@ fun EmailField() {
         singleLine = true,
         maxLines = 1,
         colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color(MegaLightBlue.value)
+            backgroundColor = Color(MegaLightBlue.value),
+            focusedIndicatorColor = Color(DarkBlue.value),
         )
 
     )
 }
+
 
 @Composable
 fun PasswordField() {
@@ -143,9 +149,24 @@ fun PasswordField() {
         singleLine = true,
         maxLines = 1,
         colors = TextFieldDefaults.textFieldColors(
-            backgroundColor = Color(MegaLightBlue.value)
+            backgroundColor = Color(MegaLightBlue.value),
+            focusedIndicatorColor = Color(DarkBlue.value),
         )
     )
+}
+
+@Composable
+fun ForgotPasswordLink() {
+    Text(
+        "Forgot your password?",
+        style = MaterialTheme.typography.body1,
+        color = Color(LightBlue.value)
+    )
+}
+
+@Composable
+fun LoginButton() {
+
 }
 
 
