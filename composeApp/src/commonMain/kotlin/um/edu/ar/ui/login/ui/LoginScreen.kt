@@ -2,15 +2,19 @@ package um.edu.ar.ui.login.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
@@ -26,6 +30,7 @@ import org.jetbrains.compose.resources.painterResource
 import um.edu.ar.ui.theme.BackgoundLightBlue
 import um.edu.ar.ui.theme.BackgroundColorBlue
 import um.edu.ar.ui.theme.DarkBlue
+import um.edu.ar.ui.theme.DisabledColor
 import um.edu.ar.ui.theme.LightBlue
 import um.edu.ar.ui.theme.MegaLightBlue
 import webtechdevices.composeapp.generated.resources.Res
@@ -53,7 +58,6 @@ fun LoginContent() {
                 6.dp,
                 shape = MaterialTheme.shapes.large,
                 ambientColor = Color.Black,
-                clip = false
             )
     ) {
         Column(
@@ -61,17 +65,13 @@ fun LoginContent() {
                 .align(Alignment.Center)
                 .background(Color(BackgoundLightBlue.value))
                 .fillMaxSize(),
-            verticalArrangement = Arrangement.Top,
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             LogoImageCompany()
-            Spacer(modifier = Modifier.padding(8.dp))
             NameCompany()
-            Spacer(modifier = Modifier.padding(8.dp))
             FieldsToComplete()
-            Spacer(modifier = Modifier.padding(8.dp))
-            ForgotPasswordLink()
-            Spacer(modifier = Modifier.padding(8.dp))
+            Links(Modifier.align(Alignment.End))
             LoginButton()
         }
     }
@@ -110,8 +110,7 @@ fun NameCompany() {
 fun FieldsToComplete() {
     Column(
         modifier = Modifier
-            .padding(16.dp)
-            .fillMaxSize(),
+            .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         EmailField()
@@ -124,7 +123,6 @@ fun EmailField() {
     TextField(
         value = "",
         onValueChange = { },
-        modifier = Modifier.fillMaxWidth(),
         placeholder = { Text("Email") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
         singleLine = true,
@@ -143,7 +141,6 @@ fun PasswordField() {
     TextField(
         value = "",
         onValueChange = { },
-        modifier = Modifier.fillMaxWidth(),
         placeholder = { Text("Password") },
         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
         singleLine = true,
@@ -156,17 +153,55 @@ fun PasswordField() {
 }
 
 @Composable
+fun Links(modifier: Modifier) {
+    Column(
+        modifier = modifier
+            .padding(end = 3.dp),
+    ) {
+        ForgotPasswordLink()
+        Spacer(modifier = modifier.padding(2.dp))
+        CreateNewAccountLink()
+    }
+}
+
+@Composable
 fun ForgotPasswordLink() {
     Text(
         "Forgot your password?",
         style = MaterialTheme.typography.body1,
-        color = Color(LightBlue.value)
+        color = Color(DarkBlue.value),
+        modifier = Modifier.clickable { }
     )
 }
 
 @Composable
-fun LoginButton() {
+fun CreateNewAccountLink() {
+    Text(
+        "Create new account",
+        style = MaterialTheme.typography.body1,
+        color = Color(DarkBlue.value),
+        modifier = Modifier.clickable { }
+    )
+}
 
+
+@Composable
+fun LoginButton() {
+    Button(
+        onClick = { },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(125.dp)
+            .padding(16.dp),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = Color(DarkBlue.value),
+                disabledBackgroundColor = Color(DisabledColor.value),
+                contentColor = Color.White,
+                disabledContentColor = Color.Gray
+            )
+        ) {
+        Text("Login")
+    }
 }
 
 
