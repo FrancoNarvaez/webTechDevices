@@ -79,6 +79,10 @@ android {
         debugImplementation(compose.uiTooling)
     }
 }
+dependencies {
+    implementation(libs.androidx.lifecycle.runtime.compose)
+}
+
 
 compose.desktop {
     application {
