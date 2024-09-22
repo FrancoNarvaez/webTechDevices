@@ -31,7 +31,13 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
-import um.edu.ar.ui.theme.*
+import um.edu.ar.ui.theme.BackgoundLightBlue
+import um.edu.ar.ui.theme.BackgroundColorBlue
+import um.edu.ar.ui.theme.BlueLinksColor
+import um.edu.ar.ui.theme.DarkBlue
+import um.edu.ar.ui.theme.DisabledColor
+import um.edu.ar.ui.theme.LightBlue
+import um.edu.ar.ui.theme.MegaLightBlue
 import webtechdevices.composeapp.generated.resources.Res
 import webtechdevices.composeapp.generated.resources.logoappremove3
 
@@ -174,7 +180,7 @@ fun Links(modifier: Modifier) {
 fun ForgotPasswordLink() {
     Text("Forgot your password?",
         style = MaterialTheme.typography.body1,
-        color = Color(DarkBlue.value),
+        color = Color(BlueLinksColor.value),
         modifier = Modifier.clickable { })
 }
 
@@ -182,7 +188,7 @@ fun ForgotPasswordLink() {
 fun CreateNewAccountLink() {
     Text("Create new account",
         style = MaterialTheme.typography.body1,
-        color = Color(DarkBlue.value),
+        color = Color(BlueLinksColor.value),
         modifier = Modifier.clickable { })
 }
 
@@ -196,7 +202,7 @@ fun LoginButton(loginEnabled: Boolean, onLoginSelected: () -> Unit) {
             backgroundColor = Color(DarkBlue.value),
             disabledBackgroundColor = Color(DisabledColor.value),
             contentColor = Color.White,
-            disabledContentColor = Color.Gray
+            disabledContentColor = Color(DarkBlue.value)
         ),
         enabled = loginEnabled
     ) {
