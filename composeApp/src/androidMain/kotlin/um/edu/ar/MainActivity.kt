@@ -5,16 +5,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material.Scaffold
+import androidx.compose.material.Text
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.snapshotFlow
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import um.edu.ar.clases.Device
 import um.edu.ar.ui.login.ui.LoginScreen
 import um.edu.ar.ui.login.ui.LoginViewModel
-import um.edu.ar.ui.mainPage.CustomizeProductView
-import um.edu.ar.ui.mainPage.ProductListView
+import um.edu.ar.ui.mainPage.CustomizeProductScreen
 import um.edu.ar.ui.mainPage.ProductViewModel
+import um.edu.ar.ui.mainPage.ProductsScreen
 import um.edu.ar.ui.scaffold.Toolbar
 
 class MainActivity : ComponentActivity() {
@@ -23,8 +26,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val navController = rememberNavController()
+            val productViewModel: ProductViewModel = viewModel()
+
             Scaffold(topBar = { Toolbar() }, content = {
                 NavHost(navController = navController, startDestination = "login") {
+
+                    // Pantalla de login
                     composable("login") {
                         val loginViewModel = LoginViewModel()
                         LoginScreen(viewModel = loginViewModel)
@@ -40,62 +47,50 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
+                    // Pantalla de lista de productos
                     composable("ProductListView") {
-                        ProductListView(products = listOf(
-                            Device(
-                                id = 1,
-                                codigo = "001",
-                                nombre = "Device 1",
-                                descripcion = "Description 1",
-                                precioBase = 100.0,
-                                moneda = "USD",
-                                caracteristicas = listOf(),
-                                personalizaciones = listOf(),
-                                adicionales = listOf()
-                            )
-                        ), // Replace with actual product list
-                            onSelectProduct = { device ->
-                                // Handle product selection
-                            })
-                        val productViewModel = ProductViewModel()
-                        LaunchedEffect(Unit) {
-                            productViewModel.navigationState.collect { state ->
-                                if (state == "CustomizeProductView") {
-                                    navController.navigate("CustomizeProductView") {
-                                        popUpTo("ProductListView") { inclusive = true }
+                        productViewModel.loadProducts()
+                        ProductsScreen(viewModel = productViewModel)
+
+                        val navigationState = productViewModel.navigationState.collectAsState().value
+                        LaunchedEffect(navigationState) {
+                            snapshotFlow { navigationState }
+                                .collect { state ->
+                                    if (state == "CustomizeProductView") {
+                                        navController.navigate("CustomizeProductView")
                                     }
                                 }
-                            }
                         }
                     }
 
-                        composable("CustomizeProductView") {
-                            CustomizeProductView(device = Device(
-                                id = 1,
-                                codigo = "001",
-                                nombre = "Device 1",
-                                descripcion = "Description 1",
-                                precioBase = 100.0,
-                                moneda = "USD",
-                                caracteristicas = listOf(),
-                                personalizaciones = listOf(),
-                                adicionales = listOf()
-                            ), // Pass the actual device
-                                finalPrice = 150.0, // Replace with actual price
+                    // Pantalla de personalización del producto
+                    composable("CustomizeProductView") {
+                        val selectedProduct = productViewModel.selectedProduct.collectAsState().value
+                        if (selectedProduct != null) {
+                            CustomizeProductScreen(
+                                device = selectedProduct,
+                                finalPrice = productViewModel.finalPrice.collectAsState().value,
                                 onAddonToggle = { addon ->
-                                    // Handle addon toggle
-                                }, onCancelClick = {
-                                    // Handle cancel click
-                                }, onCustomizationChange = { customization, option ->
-                                    // Handle customization change
-                                }, onPurchaseClick = {
-                                    // Handle purchase click
-                                }, selectedAddons = listOf(), // Replace with actual selected addons
-                                selectedCustomizations = mapOf() // Replace with actual selected customizations
+                                    productViewModel.onAddonToggle(addon)
+                                },
+                                onCancelClick = {
+                                    // Acción de cancelar
+                                },
+                                onCustomizationChange = { customization, option ->
+                                    productViewModel.onCustomizationChange(customization, option)
+                                },
+                                onPurchaseClick = {
+                                    // Acción de compra
+                                },
+                                selectedAddons = productViewModel.selectedAddons.collectAsState().value,
+                                selectedCustomizations = productViewModel.selectedCustomizations.collectAsState().value
                             )
+                        } else {
+                            Text("No se ha seleccionado ningún producto")
                         }
                     }
-                })
-            }
+                }
+            })
         }
     }
+}
