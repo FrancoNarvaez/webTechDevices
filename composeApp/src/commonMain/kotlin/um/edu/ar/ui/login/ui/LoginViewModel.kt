@@ -1,8 +1,9 @@
 package um.edu.ar.ui.login.ui
 
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import androidx.lifecycle.ViewModel
+
 
 class LoginViewModel : ViewModel() {
     private val _email = MutableStateFlow("")
@@ -17,7 +18,7 @@ class LoginViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val _navigationState = MutableStateFlow("login") // Initial state is login screen
+    private val _navigationState = MutableStateFlow("login")
     val navigationState: StateFlow<String> = _navigationState
 
     fun onLoginChanged(email: String, password: String) {
@@ -31,7 +32,7 @@ class LoginViewModel : ViewModel() {
     private fun isValidPassword(password: String): Boolean = password.length >= 6
     fun onLoginSelected() {
         _isLoading.value = true
-        _navigationState.value = "main"
+        _navigationState.value = "ProductListView"
         _isLoading.value = false
 
     }
