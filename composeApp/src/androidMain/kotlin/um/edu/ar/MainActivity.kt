@@ -4,17 +4,25 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import um.edu.ar.ui.cartshopp.CartShoppScreen
 import um.edu.ar.ui.login.LoginScreen
 import um.edu.ar.ui.login.LoginViewModel
 import um.edu.ar.ui.product.CustomizeProductScreen
@@ -22,6 +30,7 @@ import um.edu.ar.ui.product.ProductViewModel
 import um.edu.ar.ui.product.ProductsScreen
 import um.edu.ar.ui.cartshopp.CartViewModel
 import um.edu.ar.ui.scaffold.Toolbar
+import um.edu.ar.ui.theme.LightGray
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -44,7 +53,8 @@ class MainActivity : ComponentActivity() {
                             ProductsScreen(viewModel = productViewModel)
                         }
                         composable("CustomizeProductView") {
-                            val selectedProduct = productViewModel.selectedProduct.collectAsState().value
+                            val selectedProduct =
+                                productViewModel.selectedProduct.collectAsState().value
                             if (selectedProduct != null) {
                                 CustomizeProductScreen(
                                     device = selectedProduct,
@@ -52,7 +62,9 @@ class MainActivity : ComponentActivity() {
                                     onAddonToggle = { addon -> productViewModel.onAddonToggle(addon) },
                                     onCancelClick = { productViewModel.onCancelCustomization() },
                                     onCustomizationChange = { customization, option ->
-                                        productViewModel.onCustomizationChange(customization, option)
+                                        productViewModel.onCustomizationChange(
+                                            customization, option
+                                        )
                                     },
                                     onPurchaseClick = { /* Acción de compra */ },
                                     selectedAddons = productViewModel.selectedAddons.collectAsState().value,
@@ -66,8 +78,15 @@ class MainActivity : ComponentActivity() {
 
                     val isCartVisible by cartViewModel.isCartVisible.collectAsState()
                     if (isCartVisible) {
-                        Box(modifier = Modifier.fillMaxSize()) {
-                            Text("Vista de compra")
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.TopEnd)
+                                .height(500.dp)
+                                .width(250.dp)
+                                .padding(4.dp)
+                                .background(Color(LightGray.value))
+                        ) {
+                            CartShoppScreen()
                         }
                     }
 
@@ -80,14 +99,11 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun NavigationEffects(
-    loginViewModel: LoginViewModel,
-    productViewModel: ProductViewModel,
-    navController: NavController
+    loginViewModel: LoginViewModel, productViewModel: ProductViewModel, navController: NavController
 ) {
     val loginState by loginViewModel.navigationState.collectAsState()
     LaunchedEffect(loginState) {
-        snapshotFlow { loginState }
-            .collect { state ->
+        snapshotFlow { loginState }.collect { state ->
                 if (state == "ProductListView") {
                     navController.navigate("ProductListView") {
                         popUpTo("login") { inclusive = true }
@@ -98,8 +114,7 @@ fun NavigationEffects(
 
     val productState by productViewModel.navigationState.collectAsState()
     LaunchedEffect(productState) {
-        snapshotFlow { productState }
-            .collect { state ->
+        snapshotFlow { productState }.collect { state ->
                 if (state == "CustomizeProductView") {
                     navController.navigate("CustomizeProductView")
                 } else if (state == "ProductListView") {

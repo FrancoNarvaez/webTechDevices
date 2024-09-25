@@ -12,7 +12,7 @@ import um.edu.ar.ui.product.ProductViewModel
 import um.edu.ar.ui.theme.*
 import webtechdevices.composeapp.generated.resources.Res
 import webtechdevices.composeapp.generated.resources.icons8_back_96
-import webtechdevices.composeapp.generated.resources.icons8_shopping_cart_64
+import webtechdevices.composeapp.generated.resources.icons8_shopping_cart_48
 
 @Composable
 fun Toolbar() {
@@ -32,7 +32,7 @@ fun Toolbar() {
             }
             IconButton(onClick = { cartViewModel.onCartButtonClick() }) {
                 Image(
-                    painter = org.jetbrains.compose.resources.painterResource(Res.drawable.icons8_shopping_cart_64),
+                    painter = org.jetbrains.compose.resources.painterResource(Res.drawable.icons8_shopping_cart_48),
                     contentDescription = "Cart"
                 )
             }
