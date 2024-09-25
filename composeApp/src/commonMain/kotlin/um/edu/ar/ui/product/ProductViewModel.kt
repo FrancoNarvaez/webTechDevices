@@ -1,4 +1,4 @@
-package um.edu.ar.ui.mainPage
+package um.edu.ar.ui.product
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,16 +14,14 @@ class ProductViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-    private val _navigationState = MutableStateFlow("ProductListView")
+    private val _navigationState = MutableStateFlow("login")
     val navigationState: StateFlow<String> = _navigationState
 
     private val _selectedProduct = MutableStateFlow<Device?>(null)
     val selectedProduct: StateFlow<Device?> = _selectedProduct
 
-    private val _selectedCustomizations =
-        MutableStateFlow<Map<String, OpcionPersonalizacion>>(emptyMap())
-    val selectedCustomizations: StateFlow<Map<String, OpcionPersonalizacion>> =
-        _selectedCustomizations
+    private val _selectedCustomizations = MutableStateFlow<Map<String, OpcionPersonalizacion>>(emptyMap())
+    val selectedCustomizations: StateFlow<Map<String, OpcionPersonalizacion>> = _selectedCustomizations
 
     private val _selectedAddons = MutableStateFlow<List<Adicional>>(emptyList())
     val selectedAddons: StateFlow<List<Adicional>> = _selectedAddons
@@ -33,37 +31,16 @@ class ProductViewModel : ViewModel() {
 
     fun loadProducts() {
         _isLoading.value = true
-        // Simula la carga de productos desde un endpoint
         _products.value = listOf(
-            Device(
-                1,
-                "001",
-                "Notebook Pro",
-                "High-end notebook",
-                1500.0,
-                "USD",
-                listOf(),
-                listOf(),
-                listOf()
-            ), Device(
-                2,
-                "002",
-                "Tablet X",
-                "Affordable tablet",
-                500.0,
-                "USD",
-                listOf(),
-                listOf(),
-                listOf()
-            )
+            Device(1, "001", "Notebook Pro", "High-end notebook", 1500.0, "USD", listOf(), listOf(), listOf()),
+            Device(2, "002", "Tablet X", "Affordable tablet", 500.0, "USD", listOf(), listOf(), listOf())
         )
         _isLoading.value = false
     }
 
     fun onProductSelected(product: Device) {
         _selectedProduct.value = product
-        _navigationState.value =
-            "CustomizeProductView"  // Actualiza el estado para navegar a la pantalla de personalización
+        _navigationState.value = "CustomizeProductView"
     }
 
     fun onCustomizationChange(customization: String, option: OpcionPersonalizacion) {
@@ -89,5 +66,15 @@ class ProductViewModel : ViewModel() {
         val customizationsPrice = _selectedCustomizations.value.values.sumOf { it.precioAdicional }
         val addonsPrice = _selectedAddons.value.sumOf { it.precio }
         _finalPrice.value = basePrice + customizationsPrice + addonsPrice
+    }
+
+    fun onCancelCustomization() {
+        _navigationState.value = "ProductListView"
+    }
+
+    fun onBackButtonClick() {
+        if (_navigationState.value contentEquals "CustomizeProductView"){
+            _navigationState.value = "ProductListView"
+        }
     }
 }

@@ -1,4 +1,4 @@
-package um.edu.ar.ui.mainPage
+package um.edu.ar.ui.product
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Card
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
@@ -19,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import um.edu.ar.clases.Device
+import um.edu.ar.ui.theme.*
 
 @Composable
 fun ProductsScreen(viewModel: ProductViewModel) {
@@ -52,7 +54,7 @@ fun ProductListView(products: List<Device>, onSelectProduct: (Device) -> Unit) {
                     Text(text = product.nombre, style = MaterialTheme.typography.h6)
                     Text(text = product.descripcion, style = MaterialTheme.typography.body2)
                     Text(text = "Precio base: ${product.precioBase} ${product.moneda}")
-                    Button(onClick = { onSelectProduct(product) }) {
+                    Button(onClick = { onSelectProduct(product) }, colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)) {
                         Text("Seleccionar")
                     }
                 }

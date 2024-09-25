@@ -1,4 +1,4 @@
-package um.edu.ar.ui.mainPage
+package um.edu.ar.ui.product
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import um.edu.ar.clases.Adicional
 import um.edu.ar.clases.Device
 import um.edu.ar.clases.OpcionPersonalizacion
+import um.edu.ar.ui.theme.BackgroundColorBlue
 
 @Composable
 fun CustomizeProductScreen(
@@ -68,11 +70,11 @@ fun CustomizeProductScreen(
 
         // Botones de compra y cancelar
         Row {
-            Button(onClick = onPurchaseClick) {
+            Button(onClick = onPurchaseClick, colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)) {
                 Text("Comprar")
             }
             Spacer(modifier = Modifier.width(16.dp))
-            Button(onClick = onCancelClick) {
+            Button(onClick = onCancelClick, colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)) {
                 Text("Cancelar")
             }
         }

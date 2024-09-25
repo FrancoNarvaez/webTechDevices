@@ -1,9 +1,8 @@
-package um.edu.ar.ui.login.ui
+package um.edu.ar.ui.login
 
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-
 
 class LoginViewModel : ViewModel() {
     private val _email = MutableStateFlow("")
@@ -30,11 +29,10 @@ class LoginViewModel : ViewModel() {
     private fun isValidEmail(email: String): Boolean = email.contains("@") && email.contains(".")
 
     private fun isValidPassword(password: String): Boolean = password.length >= 6
+
     fun onLoginSelected() {
         _isLoading.value = true
         _navigationState.value = "ProductListView"
         _isLoading.value = false
-
     }
-
 }

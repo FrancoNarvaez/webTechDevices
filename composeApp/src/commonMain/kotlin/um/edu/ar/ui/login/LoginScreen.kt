@@ -1,4 +1,4 @@
-package um.edu.ar.ui.login.ui
+package um.edu.ar.ui.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -50,7 +50,6 @@ fun LoginScreen(viewModel: LoginViewModel) {
         LoginContent(viewModel)
     }
 }
-
 
 @Composable
 fun LoginContent(viewModel: LoginViewModel) {
