@@ -90,6 +90,7 @@ android {
 dependencies {
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.navigation.compose)
+    implementation(libs.androidx.foundation.layout.android)
 }
 
 compose.desktop {

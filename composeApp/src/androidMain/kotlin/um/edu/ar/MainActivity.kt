@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -31,7 +32,8 @@ import um.edu.ar.ui.product.ProductViewModel
 import um.edu.ar.ui.product.ProductsScreen
 import um.edu.ar.ui.cartshopp.CartViewModel
 import um.edu.ar.ui.scaffold.Toolbar
-import um.edu.ar.ui.theme.LightGray
+import um.edu.ar.ui.theme.BackgroundColorBlue
+
 
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -99,9 +101,14 @@ class MainActivity : ComponentActivity() {
                                 .height(500.dp)
                                 .width(250.dp)
                                 .padding(4.dp)
-                                .background(Color(LightGray.value))
+                                .background(Color.White)
+                                .border(3.dp, BackgroundColorBlue)
+
                         ) {
-                            CartShoppScreen(Modifier.align(Alignment.TopCenter).padding(top = 4.dp))
+                            CartShoppScreen(
+                                Modifier
+                                    .align(Alignment.TopCenter)
+                                    .padding(top = 4.dp))
                         }
                     }
 

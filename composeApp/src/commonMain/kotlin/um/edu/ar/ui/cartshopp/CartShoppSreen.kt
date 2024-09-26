@@ -2,6 +2,7 @@ package um.edu.ar.ui.cartshopp
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,9 +36,15 @@ fun CartShoppScreen(modifier: Modifier = Modifier) {
     val cartViewModel: CartViewModel = viewModel()
     val cartItems = cartViewModel.cartItems.collectAsState().value
 
-    Box(modifier = modifier.fillMaxSize().padding(16.dp)) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Row(modifier = Modifier.fillMaxWidth()) {
+    Box(
+        modifier = modifier.fillMaxSize().padding(4.dp)
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
+            ) {
                 Text(
                     "Shopping Cart",
                     style = MaterialTheme.typography.h6,
@@ -57,10 +64,17 @@ fun CartShoppScreen(modifier: Modifier = Modifier) {
                 }
             }
         }
-        Row(modifier = Modifier.fillMaxWidth().align(Alignment.BottomEnd).background(Color(LightGray.value))) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .background(Color.White),
+            horizontalArrangement = Arrangement.Center
+        ) {
             Button(
                 onClick = { /* Proceed to checkout */ },
-                colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)
+                colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue),
+                modifier = Modifier.align(Alignment.CenterVertically)
             ) {
                 Text(text = "Buy All")
             }
@@ -70,12 +84,18 @@ fun CartShoppScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun CartItemView(item: CartItem, onRemoveClick: (CartItem) -> Unit) {
-    Row(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+    Row(
+        modifier = Modifier.fillMaxWidth().padding(8.dp).background(Color(LightGray.value))
+    ) {
         Column(modifier = Modifier.weight(1f)) {
             Text(text = item.name, style = MaterialTheme.typography.body1)
             Text(text = "${item.price} x ${item.quantity}", style = MaterialTheme.typography.body2)
         }
-        Button(onClick = { onRemoveClick(item) }, colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)) {
+        Spacer(modifier = Modifier.padding(start = 4.dp))
+        Button(
+            onClick = { onRemoveClick(item) },
+            colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)
+        ) {
             Text(text = "Remove", style = MaterialTheme.typography.body2)
         }
     }
