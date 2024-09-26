@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import um.edu.ar.clases.CartItem
+import um.edu.ar.ui.theme.BackgroundColorBlue
 import um.edu.ar.ui.theme.LightGray
 import webtechdevices.composeapp.generated.resources.Res
 import webtechdevices.composeapp.generated.resources.icons8_shopping_cart_48
@@ -58,6 +60,7 @@ fun CartShoppScreen(modifier: Modifier = Modifier) {
         Row(modifier = Modifier.fillMaxWidth().align(Alignment.BottomEnd).background(Color(LightGray.value))) {
             Button(
                 onClick = { /* Proceed to checkout */ },
+                colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)
             ) {
                 Text(text = "Checkout")
             }
@@ -72,7 +75,7 @@ fun CartItemView(item: CartItem, onRemoveClick: (CartItem) -> Unit) {
             Text(text = item.name, style = MaterialTheme.typography.body1)
             Text(text = "${item.price} x ${item.quantity}", style = MaterialTheme.typography.body2)
         }
-        Button(onClick = { onRemoveClick(item) }) {
+        Button(onClick = { onRemoveClick(item) }, colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)) {
             Text(text = "Remove", style = MaterialTheme.typography.body2)
         }
     }
