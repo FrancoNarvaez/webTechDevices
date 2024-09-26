@@ -22,6 +22,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import um.edu.ar.clases.CartItem
 import um.edu.ar.ui.cartshopp.CartShoppScreen
 import um.edu.ar.ui.login.LoginScreen
 import um.edu.ar.ui.login.LoginViewModel
@@ -55,10 +56,15 @@ class MainActivity : ComponentActivity() {
                         composable("CustomizeProductView") {
                             val selectedProduct =
                                 productViewModel.selectedProduct.collectAsState().value
+
                             if (selectedProduct != null) {
+                                val finalPrice by productViewModel.finalPrice.collectAsState()
+                                val selectedAddons by productViewModel.selectedAddons.collectAsState()
+                                val selectedCustomizations by productViewModel.selectedCustomizations.collectAsState()
+
                                 CustomizeProductScreen(
                                     device = selectedProduct,
-                                    finalPrice = productViewModel.finalPrice.collectAsState().value,
+                                    finalPrice = finalPrice,
                                     onAddonToggle = { addon -> productViewModel.onAddonToggle(addon) },
                                     onCancelClick = { productViewModel.onCancelCustomization() },
                                     onCustomizationChange = { customization, option ->
@@ -66,9 +72,18 @@ class MainActivity : ComponentActivity() {
                                             customization, option
                                         )
                                     },
-                                    onPurchaseClick = { /* Acción de compra */ },
-                                    selectedAddons = productViewModel.selectedAddons.collectAsState().value,
-                                    selectedCustomizations = productViewModel.selectedCustomizations.collectAsState().value
+                                    onPurchaseClick = {
+                                        cartViewModel.addItemToCart(
+                                            CartItem(
+                                                id = selectedProduct.id,
+                                                name = selectedProduct.nombre,
+                                                price = finalPrice,
+                                                quantity = 1
+                                            )
+                                        )
+                                    },
+                                    selectedAddons = selectedAddons,
+                                    selectedCustomizations = selectedCustomizations
                                 )
                             } else {
                                 Text("No se ha seleccionado ningún producto")
@@ -86,7 +101,7 @@ class MainActivity : ComponentActivity() {
                                 .padding(4.dp)
                                 .background(Color(LightGray.value))
                         ) {
-                            CartShoppScreen()
+                            CartShoppScreen(Modifier.align(Alignment.TopCenter).padding(top = 4.dp))
                         }
                     }
 
@@ -104,24 +119,24 @@ fun NavigationEffects(
     val loginState by loginViewModel.navigationState.collectAsState()
     LaunchedEffect(loginState) {
         snapshotFlow { loginState }.collect { state ->
-                if (state == "ProductListView") {
-                    navController.navigate("ProductListView") {
-                        popUpTo("login") { inclusive = true }
-                    }
+            if (state == "ProductListView") {
+                navController.navigate("ProductListView") {
+                    popUpTo("login") { inclusive = true }
                 }
             }
+        }
     }
 
     val productState by productViewModel.navigationState.collectAsState()
     LaunchedEffect(productState) {
         snapshotFlow { productState }.collect { state ->
-                if (state == "CustomizeProductView") {
-                    navController.navigate("CustomizeProductView")
-                } else if (state == "ProductListView") {
-                    navController.navigate("ProductListView") {
-                        popUpTo("CustomizeProductView") { inclusive = true }
-                    }
+            if (state == "CustomizeProductView") {
+                navController.navigate("CustomizeProductView")
+            } else if (state == "ProductListView") {
+                navController.navigate("ProductListView") {
+                    popUpTo("CustomizeProductView") { inclusive = true }
                 }
             }
+        }
     }
 }

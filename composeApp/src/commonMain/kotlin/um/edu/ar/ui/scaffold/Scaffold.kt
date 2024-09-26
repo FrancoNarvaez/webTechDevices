@@ -24,16 +24,17 @@ fun Toolbar() {
         title = { Text(text = "Web Tech Devices", color = Color(MegaLightBlue.value)) },
         backgroundColor = Color(BackgoundLightBlue.value),
         actions = {
-            IconButton(onClick = { productViewModel.onBackButtonClick() }) {
-                Image(
-                    painter = org.jetbrains.compose.resources.painterResource(Res.drawable.icons8_back_96),
-                    contentDescription = "Back"
-                )
-            }
             IconButton(onClick = { cartViewModel.onCartButtonClick() }) {
                 Image(
                     painter = org.jetbrains.compose.resources.painterResource(Res.drawable.icons8_shopping_cart_48),
                     contentDescription = "Cart"
+                )
+            }
+
+            IconButton(onClick = { productViewModel.onBackButtonClick() }) {
+                Image(
+                    painter = org.jetbrains.compose.resources.painterResource(Res.drawable.icons8_back_96),
+                    contentDescription = "Back"
                 )
             }
         }
