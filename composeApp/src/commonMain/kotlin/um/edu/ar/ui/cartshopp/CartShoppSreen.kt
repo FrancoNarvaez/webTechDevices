@@ -62,7 +62,7 @@ fun CartShoppScreen(modifier: Modifier = Modifier) {
                 onClick = { /* Proceed to checkout */ },
                 colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)
             ) {
-                Text(text = "Checkout")
+                Text(text = "Buy All")
             }
         }
     }
