@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +30,8 @@ import um.edu.ar.ui.product.CustomizeProductScreen
 import um.edu.ar.ui.product.ProductViewModel
 import um.edu.ar.ui.product.ProductsScreen
 import um.edu.ar.ui.cartshopp.CartViewModel
+import um.edu.ar.ui.register.RegisterScreen
+import um.edu.ar.ui.register.RegisterViewModel
 import um.edu.ar.ui.scaffold.Toolbar
 import um.edu.ar.ui.theme.BackgroundColorBlue
 
@@ -44,12 +45,16 @@ class MainActivity : ComponentActivity() {
             val loginViewModel: LoginViewModel = viewModel()
             val productViewModel: ProductViewModel = viewModel()
             val cartViewModel: CartViewModel = viewModel()
+            val registerViewModel: RegisterViewModel = viewModel()
 
             Scaffold(topBar = { Toolbar() }, content = {
                 Box(modifier = Modifier.fillMaxSize()) {
                     NavHost(navController = navController, startDestination = "login") {
                         composable("login") {
-                            LoginScreen(viewModel = loginViewModel)
+                            LoginScreen(
+                                viewModel = loginViewModel,
+                                onNavigateToRegister = { navController.navigate("register") }
+                            )
                         }
                         composable("ProductListView") {
                             productViewModel.loadProducts()
@@ -87,9 +92,13 @@ class MainActivity : ComponentActivity() {
                                     selectedAddons = selectedAddons,
                                     selectedCustomizations = selectedCustomizations
                                 )
-                            } else {
-                                Text("No se ha seleccionado ningún producto")
                             }
+                        }
+                        composable("register") {
+                            RegisterScreen(
+                                viewModel = registerViewModel,
+                                onNavigateToLogin = { navController.navigate("login") }
+                            )
                         }
                     }
 

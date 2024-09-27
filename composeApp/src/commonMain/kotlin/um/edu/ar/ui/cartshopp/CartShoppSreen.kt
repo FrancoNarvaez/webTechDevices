@@ -16,6 +16,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.Divider
+import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -30,6 +32,7 @@ import um.edu.ar.ui.theme.BackgroundColorBlue
 import um.edu.ar.ui.theme.LightGray
 import webtechdevices.composeapp.generated.resources.Res
 import webtechdevices.composeapp.generated.resources.icons8_shopping_cart_48
+import webtechdevices.composeapp.generated.resources.cross
 
 @Composable
 fun CartShoppScreen(modifier: Modifier = Modifier) {
@@ -48,14 +51,22 @@ fun CartShoppScreen(modifier: Modifier = Modifier) {
                 Text(
                     "Shopping Cart",
                     style = MaterialTheme.typography.h6,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier.weight(1f).padding(top = 14.dp)
                 )
                 Image(
                     painter = org.jetbrains.compose.resources.painterResource(Res.drawable.icons8_shopping_cart_48),
                     contentDescription = "Cart",
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(40.dp).padding(top = 12.dp)
                 )
+                IconButton(onClick = { cartViewModel.onCartButtonClick() }) {
+                    Image(
+                        painter = org.jetbrains.compose.resources.painterResource(Res.drawable.cross),
+                        contentDescription = "Cart",
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
             }
+            Divider(color = BackgroundColorBlue, thickness = 2.dp)
             Spacer(modifier = Modifier.height(16.dp))
             LazyColumn(modifier = Modifier.weight(1f)) {
                 items(cartItems) { item ->

@@ -1,17 +1,14 @@
-package um.edu.ar.ui.login
+package um.edu.ar.ui.register
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
@@ -31,18 +28,17 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
+import um.edu.ar.ui.login.LogoImageCompany
+import um.edu.ar.ui.login.NameCompany
 import um.edu.ar.ui.theme.BackgroundColorBlue
 import um.edu.ar.ui.theme.BlueLinksColor
 import um.edu.ar.ui.theme.DarkBlue
 import um.edu.ar.ui.theme.DisabledColor
 import um.edu.ar.ui.theme.LightBlue
 import um.edu.ar.ui.theme.MegaLightBlue
-import webtechdevices.composeapp.generated.resources.Res
-import webtechdevices.composeapp.generated.resources.logoappremove3
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel, onNavigateToRegister: () -> Unit) {
+fun RegisterScreen(viewModel: RegisterViewModel, onNavigateToLogin: () -> Unit) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -54,14 +50,14 @@ fun LoginScreen(viewModel: LoginViewModel, onNavigateToRegister: () -> Unit) {
             Title(Modifier)
         }
         item {
-            LoginContent(viewModel, onNavigateToRegister)
+            RegisterContent(viewModel, onNavigateToLogin)
         }
     }
 }
 
 @Composable
-fun LoginContent(viewModel: LoginViewModel, onNavigateToRegister: () -> Unit) {
-    val loginEnabled = viewModel.loginEnabled.collectAsState().value
+fun RegisterContent(viewModel: RegisterViewModel, onNavigateToLogin: () -> Unit) {
+    val registerEnabled = viewModel.registerEnabled.collectAsState().value
     val isLoading = viewModel.isLoading.collectAsState().value
     val coroutineScope = rememberCoroutineScope()
 
@@ -88,11 +84,11 @@ fun LoginContent(viewModel: LoginViewModel, onNavigateToRegister: () -> Unit) {
             ) {
                 LogoImageCompany()
                 NameCompany()
-                FieldsToComplete(viewModel)
-                Links(Modifier.align(Alignment.End), onNavigateToRegister)
-                LoginButton(loginEnabled) {
+                RegisterFields(viewModel)
+                Links(Modifier.align(Alignment.End), onNavigateToLogin)
+                RegisterButton(registerEnabled) {
                     coroutineScope.launch {
-                        viewModel.onLoginSelected()
+                        onNavigateToLogin()
                     }
                 }
             }
@@ -103,7 +99,7 @@ fun LoginContent(viewModel: LoginViewModel, onNavigateToRegister: () -> Unit) {
 @Composable
 fun Title(modifier: Modifier) {
     Text(
-        "Login",
+        "Sing Up",
         style = MaterialTheme.typography.h1,
         color = Color(LightBlue.value),
         modifier = modifier.padding(start = 16.dp)
@@ -111,33 +107,17 @@ fun Title(modifier: Modifier) {
 }
 
 @Composable
-fun LogoImageCompany() {
-    Image(
-        painter = painterResource(Res.drawable.logoappremove3),
-        contentDescription = "Header Image",
-        Modifier.size(130.dp)
-    )
-}
-
-
-@Composable
-fun NameCompany() {
-    Text(
-        "Web Tech Devices", style = MaterialTheme.typography.h4, color = Color(LightBlue.value)
-    )
-}
-
-
-@Composable
-fun FieldsToComplete(viewModel: LoginViewModel) {
+fun RegisterFields(viewModel: RegisterViewModel) {
     val email = viewModel.email.collectAsState().value
     val password = viewModel.password.collectAsState().value
+    val confirmPassword = viewModel.confirmPassword.collectAsState().value
 
     Column(
         modifier = Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        EmailField(email) { viewModel.onLoginChanged(it, password) }
-        PasswordField(password) { viewModel.onLoginChanged(email, it) }
+        EmailField(email) { viewModel.onRegisterChanged(it, password, confirmPassword) }
+        PasswordField(password) { viewModel.onRegisterChanged(email, it, confirmPassword) }
+        ConfirmPasswordField(confirmPassword) { viewModel.onRegisterChanged(email, password, it) }
     }
 }
 
@@ -174,39 +154,42 @@ fun PasswordField(password: String, onTextFieldChange: (String) -> Unit) {
 }
 
 @Composable
-fun Links(modifier: Modifier, onNavigateToRegister: () -> Unit) {
+fun ConfirmPasswordField(confirmPassword: String, onTextFieldChange: (String) -> Unit) {
+    TextField(value = confirmPassword,
+        onValueChange = { onTextFieldChange(it) },
+        placeholder = { Text("Confirm Password") },
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+        singleLine = true,
+        maxLines = 1,
+        colors = TextFieldDefaults.textFieldColors(
+            backgroundColor = Color(MegaLightBlue.value),
+            focusedIndicatorColor = Color(DarkBlue.value),
+        )
+    )
+}
+
+@Composable
+fun Links(modifier: Modifier, onNavigateToLogin: () -> Unit) {
     Column(
         modifier = modifier.padding(end = 3.dp),
     ) {
-        ForgotPasswordLink()
-        Spacer(modifier = modifier.padding(2.dp))
-        CreateNewAccountLink(onNavigateToRegister)
+        IHaveAlreadyAnAccount(onNavigateToLogin)
     }
 }
 
 @Composable
-fun ForgotPasswordLink() {
-    Text("Forgot your password?",
-        style = MaterialTheme.typography.body1,
-        color = Color(BlueLinksColor.value),
-        modifier = Modifier.clickable { })
-}
-
-@Composable
-fun CreateNewAccountLink(onNavigateToRegister: () -> Unit) {
+fun IHaveAlreadyAnAccount(onNavigateToLogin: () -> Unit) {
     Text(
-        "Create new account",
+        "I have already an account",
         style = MaterialTheme.typography.body1,
         color = Color(BlueLinksColor.value),
-        modifier = Modifier.clickable { onNavigateToRegister() }
-    )
+        modifier = Modifier.clickable { onNavigateToLogin() })
 }
 
-
 @Composable
-fun LoginButton(loginEnabled: Boolean, onLoginSelected: () -> Unit) {
+fun RegisterButton(registerEnabled: Boolean, onRegisterSelected: () -> Unit) {
     Button(
-        onClick = { onLoginSelected() },
+        onClick = { onRegisterSelected() },
         modifier = Modifier.fillMaxWidth().height(125.dp).padding(16.dp),
         colors = ButtonDefaults.buttonColors(
             backgroundColor = Color(DarkBlue.value),
@@ -214,11 +197,8 @@ fun LoginButton(loginEnabled: Boolean, onLoginSelected: () -> Unit) {
             contentColor = Color.White,
             disabledContentColor = Color(DarkBlue.value)
         ),
-        enabled = loginEnabled
+        enabled = registerEnabled
     ) {
-        Text("Login")
+        Text("Register")
     }
 }
-
-
-
