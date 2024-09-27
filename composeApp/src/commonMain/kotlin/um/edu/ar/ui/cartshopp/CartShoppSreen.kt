@@ -83,7 +83,7 @@ fun CartShoppScreen(modifier: Modifier = Modifier) {
             horizontalArrangement = Arrangement.Center
         ) {
             Button(
-                onClick = { /* Proceed to checkout */ },
+                onClick = { cartViewModel.buyAllItems() },
                 colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue),
                 modifier = Modifier.align(Alignment.CenterVertically)
             ) {

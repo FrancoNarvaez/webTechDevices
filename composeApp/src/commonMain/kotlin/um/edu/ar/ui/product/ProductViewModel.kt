@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.StateFlow
 import um.edu.ar.clases.Adicional
 import um.edu.ar.clases.Device
 import um.edu.ar.clases.OpcionPersonalizacion
+import um.edu.ar.clases.Personalizacion
 
 class ProductViewModel : ViewModel() {
     private val _products = MutableStateFlow<List<Device>>(emptyList())
@@ -32,8 +33,63 @@ class ProductViewModel : ViewModel() {
     fun loadProducts() {
         _isLoading.value = true
         _products.value = listOf(
-            Device(1, "001", "Notebook Pro", "High-end notebook", 1500.0, "USD", listOf(), listOf(), listOf()),
-            Device(2, "002", "Tablet X", "Affordable tablet", 500.0, "USD", listOf(), listOf(), listOf())
+            Device(
+                id = 1,
+                codigo = "001",
+                nombre = "Notebook Pro",
+                descripcion = "High-end notebook",
+                precioBase = 1500.0,
+                moneda = "USD",
+                caracteristicas = listOf(),
+                personalizaciones = listOf(
+                    Personalizacion(
+                        id = 1,
+                        nombre = "RAM",
+                        descripcion = "Choose your RAM size",
+                        opciones = listOf(
+                            OpcionPersonalizacion(id = 1, codigo = "RAM8GB", nombre = "8GB", descripcion = "8GB RAM", precioAdicional = 100.0),
+                            OpcionPersonalizacion(id = 2, codigo = "RAM16GB", nombre = "16GB", descripcion = "16GB RAM", precioAdicional = 200.0)
+                        )
+                    ),
+                    Personalizacion(
+                        id = 2,
+                        nombre = "Storage",
+                        descripcion = "Choose your storage size",
+                        opciones = listOf(
+                            OpcionPersonalizacion(id = 3, codigo = "SSD256GB", nombre = "256GB SSD", descripcion = "256GB SSD", precioAdicional = 150.0),
+                            OpcionPersonalizacion(id = 4, codigo = "SSD512GB", nombre = "512GB SSD", descripcion = "512GB SSD", precioAdicional = 250.0)
+                        )
+                    )
+                ),
+                adicionales = listOf(
+                    Adicional(id = 1, nombre = "Mouse", descripcion = "Wireless Mouse", precio = 50.0, precioGratis = -1.0),
+                    Adicional(id = 2, nombre = "Keyboard", descripcion = "Mechanical Keyboard", precio = 100.0, precioGratis = -1.0)
+                )
+            ),
+            Device(
+                id = 2,
+                codigo = "002",
+                nombre = "Tablet X",
+                descripcion = "Affordable tablet",
+                precioBase = 500.0,
+                moneda = "USD",
+                caracteristicas = listOf(),
+                personalizaciones = listOf(
+                    Personalizacion(
+                        id = 3,
+                        nombre = "Color",
+                        descripcion = "Choose your color",
+                        opciones = listOf(
+                            OpcionPersonalizacion(id = 5, codigo = "ColorBlack", nombre = "Black", descripcion = "Black Color", precioAdicional = 0.0),
+                            OpcionPersonalizacion(id = 6, codigo = "ColorWhite", nombre = "White", descripcion = "White Color", precioAdicional = 0.0)
+                        )
+                    )
+                ),
+                adicionales = listOf(
+                    Adicional(id = 3, nombre = "Cover", descripcion = "Protective Cover", precio = 30.0, precioGratis = -1.0),
+                    Adicional(id = 4, nombre = "Screen Protector", descripcion = "Tempered Glass Screen Protector", precio = 20.0, precioGratis = -1.0)
+                )
+            )
         )
         _isLoading.value = false
     }

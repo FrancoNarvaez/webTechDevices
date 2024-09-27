@@ -12,7 +12,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,12 +28,12 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import um.edu.ar.clases.CartItem
 import um.edu.ar.ui.cartshopp.CartShoppScreen
+import um.edu.ar.ui.cartshopp.CartViewModel
 import um.edu.ar.ui.login.LoginScreen
 import um.edu.ar.ui.login.LoginViewModel
 import um.edu.ar.ui.product.CustomizeProductScreen
 import um.edu.ar.ui.product.ProductViewModel
 import um.edu.ar.ui.product.ProductsScreen
-import um.edu.ar.ui.cartshopp.CartViewModel
 import um.edu.ar.ui.register.RegisterScreen
 import um.edu.ar.ui.register.RegisterViewModel
 import um.edu.ar.ui.scaffold.Toolbar
@@ -51,10 +55,8 @@ class MainActivity : ComponentActivity() {
                 Box(modifier = Modifier.fillMaxSize()) {
                     NavHost(navController = navController, startDestination = "login") {
                         composable("login") {
-                            LoginScreen(
-                                viewModel = loginViewModel,
-                                onNavigateToRegister = { navController.navigate("register") }
-                            )
+                            LoginScreen(viewModel = loginViewModel,
+                                onNavigateToRegister = { navController.navigate("register") })
                         }
                         composable("ProductListView") {
                             productViewModel.loadProducts()
@@ -95,10 +97,8 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                         composable("register") {
-                            RegisterScreen(
-                                viewModel = registerViewModel,
-                                onNavigateToLogin = { navController.navigate("login") }
-                            )
+                            RegisterScreen(viewModel = registerViewModel,
+                                onNavigateToLogin = { navController.navigate("login") })
                         }
                     }
 
@@ -117,7 +117,8 @@ class MainActivity : ComponentActivity() {
                             CartShoppScreen(
                                 Modifier
                                     .align(Alignment.TopCenter)
-                                    .padding(top = 4.dp))
+                                    .padding(top = 4.dp)
+                            )
                         }
                     }
 

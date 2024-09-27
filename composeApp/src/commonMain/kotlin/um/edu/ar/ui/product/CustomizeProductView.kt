@@ -14,6 +14,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.RadioButton
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import um.edu.ar.clases.Adicional
@@ -45,9 +46,13 @@ fun CustomizeProductScreen(
         device.personalizaciones.forEach { personalizacion ->
             Text(text = personalizacion.nombre)
             personalizacion.opciones.forEach { opcion ->
-                RadioButton(selected = selectedCustomizations[personalizacion.nombre] == opcion,
-                    onClick = { onCustomizationChange(personalizacion.nombre, opcion) })
-                Text(text = "${opcion.nombre} (+${opcion.precioAdicional})")
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = selectedCustomizations[personalizacion.nombre] == opcion,
+                        onClick = { onCustomizationChange(personalizacion.nombre, opcion) }
+                    )
+                    Text(text = "${opcion.nombre} (+${opcion.precioAdicional})")
+                }
             }
         }
 

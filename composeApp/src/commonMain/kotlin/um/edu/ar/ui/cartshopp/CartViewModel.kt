@@ -27,4 +27,10 @@ class CartViewModel : ViewModel() {
             remove(item)
         }
     }
+
+    fun buyAllItems() {
+        // Implement the logic to process the purchase of all items in the cart
+        // For example, send the cart items to a backend service
+        _cartItems.value = emptyList() // Clear the cart after purchase
+    }
 }
