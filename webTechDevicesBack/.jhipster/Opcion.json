@@ -1,0 +1,39 @@
+{
+  "annotations": {
+    "changelogDate": "20241010144039"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "codigo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "nombre",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "precioAdicional",
+      "fieldType": "BigDecimal"
+    }
+  ],
+  "name": "Opcion",
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityName": "personalizacion",
+      "otherEntityRelationshipName": "opcion",
+      "relationshipName": "personalizacion",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

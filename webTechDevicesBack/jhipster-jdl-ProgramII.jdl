@@ -1,0 +1,51 @@
+entity Dispositivo {
+    codigo String required,
+    nombre String required,
+    descripcion String,
+    precioBase BigDecimal required,
+    moneda String required
+}
+
+entity Caracteristica {
+    nombre String required,
+    descripcion String
+}
+
+entity Personalizacion {
+    nombre String required,
+    descripcion String
+}
+
+entity Opcion {
+    codigo String required,
+    nombre String,
+    descripcion String,
+    precioAdicional BigDecimal
+}
+
+entity Adicional {
+    nombre String required,
+    descripcion String,
+    precio BigDecimal required,
+    precioGratis BigDecimal required
+}
+
+entity Venta {
+    idVentaProfe Long required,
+    descripcion String,
+    preciofinal BigDecimal required,
+    fecha Instant
+}
+
+relationship OneToMany {
+    Personalizacion to Opcion,
+    Dispositivo{caracteristicas} to Caracteristica,
+    Dispositivo{personalizaciones} to Personalizacion{opciones},
+    Dispositivo{adicionales} to Adicional,
+}
+
+dto Adicional, Caracteristica, Dispositivo, Opcion, Personalizacion, Venta with mapstruct
+paginate Adicional, Dispositivo, Opcion, Personalizacion, Venta with infinite-scroll
+service Adicional, Caracteristica, Dispositivo, Opcion, Personalizacion, Venta with serviceClass
+search Adicional, Caracteristica, Dispositivo, Opcion, Personalizacion, Venta with no
+

@@ -1,0 +1,38 @@
+{
+  "annotations": {
+    "changelogDate": "20241010144038"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nombre",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    }
+  ],
+  "name": "Personalizacion",
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityName": "opcion",
+      "otherEntityRelationshipName": "personalizacion",
+      "relationshipName": "opcion",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "dispositivo",
+      "otherEntityRelationshipName": "personalizaciones",
+      "relationshipName": "opciones",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

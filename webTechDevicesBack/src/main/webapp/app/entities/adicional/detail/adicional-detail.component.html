@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (adicional(); as adicionalRef) {
+      <div>
+        <h2 data-cy="adicionalDetailsHeading"><span jhiTranslate="webTechDevicesBackApp.adicional.detail.title">Adicional</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ adicionalRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="webTechDevicesBackApp.adicional.nombre">Nombre</span></dt>
+          <dd>
+            <span>{{ adicionalRef.nombre }}</span>
+          </dd>
+          <dt><span jhiTranslate="webTechDevicesBackApp.adicional.descripcion">Descripcion</span></dt>
+          <dd>
+            <span>{{ adicionalRef.descripcion }}</span>
+          </dd>
+          <dt><span jhiTranslate="webTechDevicesBackApp.adicional.precio">Precio</span></dt>
+          <dd>
+            <span>{{ adicionalRef.precio }}</span>
+          </dd>
+          <dt><span jhiTranslate="webTechDevicesBackApp.adicional.precioGratis">Precio Gratis</span></dt>
+          <dd>
+            <span>{{ adicionalRef.precioGratis }}</span>
+          </dd>
+          <dt><span jhiTranslate="webTechDevicesBackApp.adicional.dispositivo">Dispositivo</span></dt>
+          <dd>
+            @if (adicional()!.dispositivo) {
+              <div>
+                <a [routerLink]="['/dispositivo', adicional()!.dispositivo?.id, 'view']">{{ adicionalRef.dispositivo?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Volver</span>
+        </button>
+
+        <button type="button" [routerLink]="['/adicional', adicionalRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

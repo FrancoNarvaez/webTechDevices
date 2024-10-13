@@ -1,0 +1,99 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-opcion-heading" data-cy="OpcionCreateUpdateHeading" jhiTranslate="webTechDevicesBackApp.opcion.home.createOrEditLabel">
+        Crear o editar Opcion
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="webTechDevicesBackApp.opcion.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let codigoRef = editForm.get('codigo')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_codigo" jhiTranslate="webTechDevicesBackApp.opcion.codigo">Codigo</label>
+          <input type="text" class="form-control" name="codigo" id="field_codigo" data-cy="codigo" formControlName="codigo" />
+          @if (codigoRef.invalid && (codigoRef.dirty || codigoRef.touched)) {
+            <div>
+              @if (editForm.get('codigo')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Este campo es obligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_nombre" jhiTranslate="webTechDevicesBackApp.opcion.nombre">Nombre</label>
+          <input type="text" class="form-control" name="nombre" id="field_nombre" data-cy="nombre" formControlName="nombre" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_descripcion" jhiTranslate="webTechDevicesBackApp.opcion.descripcion">Descripcion</label>
+          <input
+            type="text"
+            class="form-control"
+            name="descripcion"
+            id="field_descripcion"
+            data-cy="descripcion"
+            formControlName="descripcion"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_precioAdicional" jhiTranslate="webTechDevicesBackApp.opcion.precioAdicional"
+            >Precio Adicional</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="precioAdicional"
+            id="field_precioAdicional"
+            data-cy="precioAdicional"
+            formControlName="precioAdicional"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_personalizacion" jhiTranslate="webTechDevicesBackApp.opcion.personalizacion"
+            >Personalizacion</label
+          >
+          <select
+            class="form-control"
+            id="field_personalizacion"
+            data-cy="personalizacion"
+            name="personalizacion"
+            formControlName="personalizacion"
+            [compareWith]="comparePersonalizacion"
+          >
+            <option [ngValue]="null"></option>
+            @for (personalizacionOption of personalizacionsSharedCollection; track $index) {
+              <option [ngValue]="personalizacionOption">{{ personalizacionOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancelar</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Guardar</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

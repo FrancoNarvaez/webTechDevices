@@ -1,0 +1,115 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-venta-heading" data-cy="VentaCreateUpdateHeading" jhiTranslate="webTechDevicesBackApp.venta.home.createOrEditLabel">
+        Crear o editar Venta
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="webTechDevicesBackApp.venta.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let idVentaProfeRef = editForm.get('idVentaProfe')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_idVentaProfe" jhiTranslate="webTechDevicesBackApp.venta.idVentaProfe">Id Venta Profe</label>
+          <input
+            type="number"
+            class="form-control"
+            name="idVentaProfe"
+            id="field_idVentaProfe"
+            data-cy="idVentaProfe"
+            formControlName="idVentaProfe"
+          />
+          @if (idVentaProfeRef.invalid && (idVentaProfeRef.dirty || idVentaProfeRef.touched)) {
+            <div>
+              @if (editForm.get('idVentaProfe')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Este campo es obligatorio.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('idVentaProfe')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Este campo debe ser un número.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_descripcion" jhiTranslate="webTechDevicesBackApp.venta.descripcion">Descripcion</label>
+          <input
+            type="text"
+            class="form-control"
+            name="descripcion"
+            id="field_descripcion"
+            data-cy="descripcion"
+            formControlName="descripcion"
+          />
+        </div>
+
+        @let preciofinalRef = editForm.get('preciofinal')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_preciofinal" jhiTranslate="webTechDevicesBackApp.venta.preciofinal">Preciofinal</label>
+          <input
+            type="number"
+            class="form-control"
+            name="preciofinal"
+            id="field_preciofinal"
+            data-cy="preciofinal"
+            formControlName="preciofinal"
+          />
+          @if (preciofinalRef.invalid && (preciofinalRef.dirty || preciofinalRef.touched)) {
+            <div>
+              @if (editForm.get('preciofinal')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Este campo es obligatorio.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('preciofinal')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Este campo debe ser un número.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_fecha" jhiTranslate="webTechDevicesBackApp.venta.fecha">Fecha</label>
+          <div class="d-flex">
+            <input
+              id="field_fecha"
+              data-cy="fecha"
+              type="datetime-local"
+              class="form-control"
+              name="fecha"
+              formControlName="fecha"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancelar</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Guardar</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
