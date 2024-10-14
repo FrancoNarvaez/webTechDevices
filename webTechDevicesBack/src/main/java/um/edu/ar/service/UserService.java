@@ -53,6 +53,45 @@ public class UserService {
         this.cacheManager = cacheManager;
     }
 
+    public void registerUser(UserDTO userDTO) {
+        if (userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
+            throw new UsernameAlreadyUsedException();
+        }
+        if (userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
+            throw new EmailAlreadyUsedException();
+        }
+        User newUser = new User();
+        newUser.setLogin(userDTO.getLogin().toLowerCase());
+        newUser.setEmail(userDTO.getEmail().toLowerCase());
+        newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        newUser.setLangKey(userDTO.getLangKey());
+        newUser.setActivated(false);
+        newUser.setActivationKey(RandomUtil.generateActivationKey());
+        userRepository.save(newUser);
+        clearUserCaches(newUser);
+        LOG.debug("Created Information for User: {}", newUser);
+    }
+
+    public void activateUser(UserDTO userDTO) {
+        User user = userRepository.findOneByLogin(userDTO.getLogin())
+            .orElseThrow(() -> new UserNotFoundException("User not found"));
+        user.setActivated(true);
+        user.setActivationKey(null);
+        userRepository.save(user);
+        clearUserCaches(user);
+        LOG.debug("Activated user: {}", user);
+    }
+
+    public String authenticateUser(UserDTO userDTO) {
+        User user = userRepository.findOneByLogin(userDTO.getLogin())
+            .orElseThrow(() -> new UserNotFoundException("User not found"));
+        if (!passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+            throw new InvalidPasswordException();
+        }
+        // Generate token (implementation depends on your token generation strategy)
+        return "generated-token";
+    }
+
     public Optional<User> activateRegistration(String key) {
         LOG.debug("Activating user for activation key {}", key);
         return userRepository

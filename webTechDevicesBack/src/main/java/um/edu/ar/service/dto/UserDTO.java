@@ -2,6 +2,7 @@ package um.edu.ar.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import um.edu.ar.domain.User;
 
 /**
@@ -15,6 +16,12 @@ public class UserDTO implements Serializable {
 
     private String login;
 
+    private String email;
+
+    private String password;
+
+    private String langKey;
+
     public UserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -23,6 +30,7 @@ public class UserDTO implements Serializable {
         this.id = user.getId();
         // Customize it here if you need, or not, firstName/lastName/etc
         this.login = user.getLogin();
+        this.email = user.getEmail();
     }
 
     public Long getId() {
@@ -39,6 +47,30 @@ public class UserDTO implements Serializable {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getLangKey() {
+        return langKey;
+    }
+
+    public void setLangKey(String langKey) {
+        this.langKey = langKey;
     }
 
     @Override
@@ -66,9 +98,6 @@ public class UserDTO implements Serializable {
     // prettier-ignore
     @Override
     public String toString() {
-        return "UserDTO{" +
-            "id='" + id + '\'' +
-            ", login='" + login + '\'' +
-            "}";
+        return "UserDTO{" + "id='" + id + '\'' + ", login='" + login + '\'' + "}";
     }
 }
