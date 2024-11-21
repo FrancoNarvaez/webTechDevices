@@ -3,6 +3,7 @@ package um.edu.ar.ui.scaffold
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.Image
 import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.runtime.Composable
@@ -15,7 +16,7 @@ import webtechdevices.composeapp.generated.resources.icons8_back_96
 import webtechdevices.composeapp.generated.resources.icons8_shopping_cart_48
 
 @Composable
-fun Toolbar() {
+fun TopAppBar() {
     val productViewModel: ProductViewModel = viewModel()
     val cartViewModel: CartViewModel = viewModel()
 
@@ -39,4 +40,20 @@ fun Toolbar() {
             }
         }
     )
+}
+
+@Composable
+fun BottomNavigationBar(navController: NavController) {
+    BottomNavigation {
+        BottomNavigationItem(
+            icon = { Icon(Icons.Filled.List, contentDescription = "Products") },
+            selected = false,
+            onClick = { navController.navigate("ProductListView") }
+        )
+        BottomNavigationItem(
+            icon = { Icon(Icons.Filled.ShoppingCart, contentDescription = "Sales") },
+            selected = false,
+            onClick = { navController.navigate("SalesView") }
+        )
+    }
 }

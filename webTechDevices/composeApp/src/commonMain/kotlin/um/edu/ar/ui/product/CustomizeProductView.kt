@@ -31,6 +31,7 @@ fun CustomizeProductScreen(
     selectedAddons: List<Adicional>,
     onAddonToggle: (Adicional) -> Unit,
     onPurchaseClick: () -> Unit,
+    onAddClick: () -> Unit,
     onCancelClick: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize().padding(16.dp)) {
@@ -73,10 +74,14 @@ fun CustomizeProductScreen(
         // Mostrar precio final
         Text(text = "Precio final: $finalPrice")
 
-        // Botones de compra y cancelar
+        // Botones de compra ,cancelar y agregar al carrito
         Row {
             Button(onClick = onPurchaseClick, colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)) {
                 Text("Comprar")
+            }
+            Spacer(modifier = Modifier.width(16.dp))
+            Button(onClick = onAddClick, colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)) {
+                Text("Agregar al carro")
             }
             Spacer(modifier = Modifier.width(16.dp))
             Button(onClick = onCancelClick, colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)) {

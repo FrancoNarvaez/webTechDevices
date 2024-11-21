@@ -36,7 +36,8 @@ import um.edu.ar.ui.product.ProductViewModel
 import um.edu.ar.ui.product.ProductsScreen
 import um.edu.ar.ui.register.RegisterScreen
 import um.edu.ar.ui.register.RegisterViewModel
-import um.edu.ar.ui.scaffold.Toolbar
+import um.edu.ar.ui.scaffold.BottomNavigationBar
+import um.edu.ar.ui.scaffold.TopAppBar
 import um.edu.ar.ui.theme.BackgroundColorBlue
 
 
@@ -51,7 +52,9 @@ class MainActivity : ComponentActivity() {
             val cartViewModel: CartViewModel = viewModel()
             val registerViewModel: RegisterViewModel = viewModel()
 
-            Scaffold(topBar = { Toolbar() }, content = {
+            Scaffold(topBar = { TopAppBar() },
+                bottomBar = {BottomNavigationBar(navController)},
+                content = {
                 Box(modifier = Modifier.fillMaxSize()) {
                     NavHost(navController = navController, startDestination = "login") {
                         composable("login") {
@@ -82,6 +85,16 @@ class MainActivity : ComponentActivity() {
                                         )
                                     },
                                     onPurchaseClick = {
+                                        cartViewModel.addItemToCart(
+                                            CartItem(
+                                                id = selectedProduct.id,
+                                                name = selectedProduct.nombre,
+                                                price = finalPrice,
+                                                quantity = 1
+                                            )
+                                        )
+                                    },
+                                    onAddClick = {
                                         cartViewModel.addItemToCart(
                                             CartItem(
                                                 id = selectedProduct.id,

@@ -1,0 +1,459 @@
+Programación 2 - año 2024
+Trabajo Final
+Enunciado del trabajo de regularización y aprobación de la materia
+Versión 1.1 (2024-08-20)
+
+Resumen
+El proyecto es un sitio de ventas de dispositivos tipo PCs o tabletas.
+Hay un servicio desarrollado por la cátedra que será consumido por el servicio desarrollado
+por los alumnos de la cátedra.
+El sitio de los alumnos estará compuesto por un backend desarrollado en Java y un frontend
+desarrollado en KMP. El frontend utilizará endpoints del backend para interactuar.
+
+Definición
+A continuación se describen las funcionalidades por servicio.
+
+Cátedra
+Hay un servicio desarrollado por la cátedra que tiene 4 endpoints que deben ser
+consumidos por el servicio de los alumnos.
+1. Lista de dispositivos (JSON 1): Este endpoint devuelve una lista de dispositivos a
+vender.
+URL: http://IP-SERVIDOR:8080/api/catedra/dispositivos
+Método: GET
+2. Crear venta (JSON 2): Este endpoint registra una venta dentro del sistema. Al
+llamarlo devuelve un objeto JSON con el resultado de la venta.
+URL: http://IP-SERVIDOR:8080/api/catedra/vender
+Método: POST
+3. Listar ventas (JSON 3): Este endpoint devuelve una lista con las ventas realizadas.
+URL: http://IP-SERVIDOR:8080/api/catedra/ventas/
+Método: GET
+4. Mostrar una venta en particular (JSON 4): Este endpoint devuelve el detalle de una
+venta realizada, se debe de enviar el ID de la venta.
+URL: http://IP-SERVIDOR:8080/api/catedra/venta/ID
+Método: GET
+
+Alumno - servicio 1 - Venta
+Este es el servicio que desarrollará el alumno que trabaje solo o uno de los 2 alumnos del
+grupo.
+
+Resumen
+El servicio obtiene una lista de productos del servidor de la cátedra, esa lista se la presenta
+en la interfaz web, se personaliza y se realiza la venta.
+
+Proceso de venta (interfaz gráfica)
+La interfaz web le muestra al usuario final un listado de dispositivos disponibles, selecciona
+uno de la lista, realiza la personalización y compra el producto.
+
+Proceso de personalización
+Cada dispositivo se encuentra compuesto de la siguiente información:
+● Nombre, descripción y precio base. De estos valores no se elige nada.
+● Características: Es una lista de características que describe al equipo (por ejemplo
+datos de la cámara, pantalla, batería). De estos datos no se elige nada.
+● Personalizaciones: Hay ciertas características de los equipos que se pueden
+personalizar (procesador, memoria, video, etc.).
+Cada una de las personalizaciones tiene una lista de opciones para seleccionar
+(siempre se tiene que elegir uno de ellos). Debe seleccionarse una de ellas y la
+selección va a alterar el valor final del equipo.
+● Adicionales: Hay una lista de ítems adicionales que pueden seleccionarse o no. Al
+seleccionarse variará el valor final del equipo.
+Cada adicional tiene un valor llamado precioGratis, si el precio del equipo sumado al
+precio de las personalizaciones supera el valor de este campo significa que al
+seleccionarlo el precio no se suma ya que al superar el monto queda en promoción.
+Si el valor es igual a -1 entonces el producto nunca se encuentra en promoción.
+
+Proceso interno del servicio
+Datos del servicio de la cátedra: el servicio debe consumir y sincronizar los datos de los
+dispositivos (JSON 1) desde el endpoint http://IP-SERVIDOR:8080/api/catedra/dispositivos .
+El servicio debe mantener una copia de los datos del servidor de la cátedra localmente,
+periódicamente, puede ser minutos u horas (parametrizable), y detectar cambios, en caso
+de haberlos se deben sincronizar los datos locales con los datos remotos.
+Venta de productos (interfaz): La interfaz de usuario debe pedir la lista de productos a
+vender y armar una lista de ellos.
+Se debe poder elegir un dispositivo para realizar la venta.
+En la interfaz se muestra el dispositivo para realizar la venta, se debe mostar:
+● Información general + características
+● Personalizaciones donde se lista cada una de ellas, las opciones de cada
+personalización, seleccionado por defecto la opción inicial (valor 0) y la posibilidad
+de elegir una opción de cada personalización.
+● Adicionales: mostrar la lista de adicionales y dar la opción de elegir cada uno de
+ellos.
+A continuación de los adicionales debe mostrarse el precio del equipo que se está
+personalizando y un botón de comprar o cancelar.
+
+El valor final del equipo se debe ir calculando de acuerdo a las personalizaciones y
+adicionales, cada cambio que se realice debe actualizar el precio.
+Venta de producto (proceso): Una vez realizada la personalización se debe registrar en el
+sistema interno y notificar de una venta al servidor de la cátedra enviando un objeto con los
+datos (JSON 2) al endpoint http://IP-SERVIDOR:8080/api/catedra/vender.
+Al enviar el JSON de venta el dato quedará registrado en el servicio de la cátedra y
+devolverá un ID de la venta para luego poder consultarlo en la cátedra utilizando este
+endpoint: http://IP-SERVIDOR:8080/api/catedra/venta/ID y obtendremos un objeto JSON
+con los datos de la venta (JSON 4).
+
+Alumno - servicio 2 - Catedra
+Si hay un grupo de 2 alumnos el servicio a desarrollar el segundo alumno es desarrollar el
+servicio de la cátedra. En ese caso consultar con el profesor para entender cómo es el
+desarrollo de las especificaciones que ya se han brindado anteriormente.
+
+Consideraciones adicionales
+Notas importantes respecto del desarrollo:
+● Se debe desarrollar el backend utilizando JHipster.
+● Se debe desarrollar el frontend con KMP.
+● El acceso a los endpoints deben realizarse usando seguridad con tokens JWT, de la
+misma forma que los servicios acceden al servicio de la cátedra.
+● Los servicios deben desarrollarse junto con sus pruebas (tests).
+● El servicio web debe registrar actividad relevante mediante el uso de logs.
+
+Seguridad e inicio de sesión
+Registro
+Para que un equipo de trabajo pueda consumir los recursos de la cátedra deberá crear un
+usuario e iniciar sesión para obtener un token de acceso.
+
+Proceso de registro
+Crear usuario
+Se debe crear el usuario accediendo a un endpoint con la siguiente información:
+URL: http://IP-SERVIDOR:8080/api/register
+Método: POST
+{
+"login": "juanperez",
+"email": "juan@perez.org",
+"password": "juan123",
+"langKey": "es"
+}
+
+Los datos que se envían son los datos similares que se crean desde la interfaz web
+generada por jhipster.
+Respuesta (Servidor → Cliente): HTTP 201 Created
+Activar usuario
+En el paso anterior se crea el usuario en la base de datos pero no se puede iniciar sesión
+hasta que no se haya activado. Para activar hay que enviar este mensaje:
+URL: http://IP-SERVIDOR:8080/api/activar
+Método: POST
+{
+"login": "juanperez",
+"email": "juan@perez.org",
+"nombres": "Gomez Juan, Tapia Ricardo",
+"descripcion": "Grupo 20 - blah blah blah"
+}
+
+Respuesta (Servidor → Cliente): HTTP 200 OK
+Inicio de sesión / obtención de token de acceso
+Para obtener el token de acceso debemos iniciar sesión en el servidor con el siguente
+mensaje:
+URL: http://IP-SERVIDOR:8080/api/authenticate
+Metodo: POST
+{
+"username": "juanperez",
+"password": "juan123",
+"rememberMe": false
+}
+
+Respuesta (Servidor → Cliente): HTTP 200 OK
+La respuesta es un objeto JSON con el id_token conteniendo el token.
+{
+}
+
+"id_token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOi...GckUzA"
+
+Nota: Todos los accesos posteriores deben realizarse utilizando el token.
+
+Datos JSON
+JSON 1 - Dispositivos
+Estos datos son una lista de dispositivos, cada dispositivo tiene el siguiente formato:
+{
+
+"id": 2,
+"codigo": "NTB02",
+"nombre": "Notebook 2",
+"descripcion": "Descripción detallada de la Notebook",
+
+"precioBase": 2250.00,
+"moneda": "USD",
+"caracteristicas": [
+{
+"id": 4,
+"nombre": "Pantalla",
+"descripcion": "Pantalla OLED 16\""
+},
+{
+"id": 5,
+"nombre": "Camara",
+"descripcion": "Camara Web 1080p"
+},
+{
+"id": 6,
+"nombre": "Batería",
+"descripcion": "Batería 80Wh"
+},
+{
+"id": 7,
+"nombre": "Adicional",
+"descripcion": "Lector de memoria múltiple"
+}
+],
+"personalizaciones": [
+{
+"id": 3,
+"nombre": "CPU",
+"descripcion": "Procesadores Disponibles",
+"opciones": [
+{
+"id": 3,
+"codigo": "PROC03",
+"nombre": "Core Y1",
+"descripcion": "Procesador 1.2 GHz - 10 Cores",
+"precioAdicional": 0.00
+},
+{
+"id": 4,
+"codigo": "PROC04",
+"nombre": "Core Y2",
+"descripcion": "Procesador 1.7 GHz - 24 Cores",
+"precioAdicional": 700.00
+}
+]
+},
+{
+"id": 4,
+"nombre": "Memoria",
+"descripcion": "Memorias Disponibles",
+"opciones": [
+{
+"id": 7,
+"codigo": "MEM03",
+"nombre": "DDR4-8",
+"descripcion": "Memoria DDR4 - 8GB",
+"precioAdicional": 0.00
+},
+{
+"id": 8,
+"codigo": "MEM04",
+"nombre": "DDR4-16",
+"descripcion": "Memoria DDR4 - 16GB",
+"precioAdicional": 300.00
+},
+{
+"id": 9,
+"codigo": "MEM05",
+
+"nombre": "DDR4-32",
+"descripcion": "Memoria DDR4 - 32GB",
+"precioAdicional": 900.00
+]
+
+}
+
+},
+{
+"id": 6,
+"nombre": "Video",
+"descripcion": "Video Disponible",
+"opciones": [
+{
+"id": 12,
+"codigo": "VID01",
+"nombre": "Integrado",
+"descripcion": "Video Integrado Memoria Compartida",
+"precioAdicional": 0.00
+},
+{
+"id": 13,
+"codigo": "VID02",
+"nombre": "Aceleradora 3D",
+"descripcion": "Nvidia XYZ-200 12GB",
+"precioAdicional": 900.00
+}
+]
+}
+],
+"adicionales": [
+{
+"id": 1,
+"nombre": "Mouse",
+"descripcion": "Mouse Bluetooth 3 teclas",
+"precio": 40.50,
+"precioGratis": 2000.00
+},
+{
+"id": 2,
+"nombre": "Teclado",
+"descripcion": "Teclado bluetooth",
+"precio": 78.00,
+"precioGratis": -1.00
+},
+{
+"id": 3,
+"nombre": "Funda",
+"descripcion": "Funda de silicona",
+"precio": 30.00,
+"precioGratis": 2650.00
+},
+{
+"id": 4,
+"nombre": "Cargador",
+"descripcion": "Cargador rápido",
+"precio": 189.00,
+"precioGratis": 2400.00
+}
+]
+}
+
+JSON 2 - Realizar venta
+Estos datos representan una venta, donde pasamos el ID del dispositivo y el ID y precio de
+las personalizaciones y los adicionales. Este JSON se debe enviar al servidor de la cátedra.
+
+{
+"idDispositivo": 2,
+"personalizaciones": [
+{
+"id": 3,
+"precio": 0.0
+},
+{
+"id": 8,
+"precio": 330.0
+},
+{
+"id": 12,
+"precio": 0.0
+}
+],
+"adicionales": [
+{
+"id": 1,
+"precio": 0.0
+},
+{
+"id": 2,
+"precio": 78.0
+},
+{
+"id": 4,
+"precio": 0.0
+}
+],
+"precioFinal": 2847,
+"fechaVenta": "2024-08-10T20:15:00z"
+}
+
+JSON 3 - Lista de ventas
+Este JSON es el listado de ventas que se han realizado y registrado en el servidor de la
+cátedra.
+[
+{
+
+},
+{
+
+}
+]
+
+"idVenta": 200,
+"id": 2,
+"codigo": "NTB02",
+"nombre": "Notebook 2",
+"descripcion": "Descripción detallada de la Notebook",
+"precio": 2250.00
+"idVenta": 201,
+"id": 3,
+"codigo": "NTB10",
+"nombre": "Notebook 10",
+"descripcion": "Descripción detallada de la Notebook",
+"precio": 3050.00
+
+JSON 4 - Datos de una venta
+Este JSON es el que devuelve el servidor de la cátedra cuando se consulta una venta
+{
+"idVenta": 200,
+"idDispositivo": 2,
+"codigo": "NTB02",
+"nombre": "Notebook 2",
+"descripcion": "Descripción detallada de la Notebook",
+"precioBase": 2250.0,
+"moneda": "USD",
+"caracteristicas": [
+{
+"id": 4,
+"nombre": "Pantalla",
+"descripcion": "Pantalla OLED 16\""
+},
+{
+"id": 5,
+"nombre": "Camara",
+"descripcion": "Camara Web 1080p"
+},
+{
+"id": 6,
+"nombre": "Batería",
+"descripcion": "Batería 80Wh"
+},
+{
+"id": 7,
+"nombre": "Adicional",
+"descripcion": "Lector de memoria múltiple"
+}
+],
+"personalizaciones": [
+{
+"id": 3,
+"nombre": "CPU",
+"descripcion": "Procesadores Disponibles",
+"opcion": {
+"id": 3,
+"codigo": "PROC03",
+"nombre": "Core Y1",
+"descripcion": "Procesador 1.2 GHz - 10 Cores",
+"precioAdicional": 0.0
+}
+},
+{
+"id": 4,
+"nombre": "Memoria",
+"descripcion": "Memorias Disponibles",
+"opcion": {
+"id": 8,
+"codigo": "MEM04",
+"nombre": "DDR4-16",
+"descripcion": "Memoria DDR4 - 16GB",
+"precioAdicional": 300.0
+}
+},
+{
+"id": 6,
+"nombre": "Video",
+"descripcion": "Video Disponible",
+"opcion": {
+"id": 12,
+"codigo": "VID01",
+"nombre": "Integrado",
+
+}
+}
+
+"descripcion": "Video Integrado Memoria Compartida",
+"precioAdicional": 0.0
+
+],
+"adicionales": [
+{
+"id": 1,
+"nombre": "Mouse",
+"descripcion": "Mouse Bluetooth 3 teclas",
+"precio": 0.0
+},
+{
+"id": 2,
+"nombre": "Teclado",
+"descripcion": "Teclado bluetooth",
+"precio": 78.0
+},
+{
+"id": 4,
+"nombre": "Cargador",
+"descripcion": "Cargador rápido",
+"precio": 0.0
+}
+]
+}
+
+
