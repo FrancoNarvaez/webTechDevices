@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import um.edu.ar.clases.CartItem
 import um.edu.ar.ui.cartshopp.CartShoppScreen
@@ -40,7 +41,6 @@ import um.edu.ar.ui.scaffold.BottomNavigationBar
 import um.edu.ar.ui.scaffold.TopAppBar
 import um.edu.ar.ui.theme.BackgroundColorBlue
 
-
 class MainActivity : ComponentActivity() {
     @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,92 +52,100 @@ class MainActivity : ComponentActivity() {
             val cartViewModel: CartViewModel = viewModel()
             val registerViewModel: RegisterViewModel = viewModel()
 
-            Scaffold(topBar = { TopAppBar() },
-                bottomBar = {BottomNavigationBar(navController)},
+            val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+
+            Scaffold(
+                topBar = { TopAppBar() },
+                bottomBar = {
+                    if (currentRoute != "login" && currentRoute != "register") {
+                        BottomNavigationBar(currentRoute, navController::navigate)
+                    }
+                },
                 content = {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    NavHost(navController = navController, startDestination = "login") {
-                        composable("login") {
-                            LoginScreen(viewModel = loginViewModel,
-                                onNavigateToRegister = { navController.navigate("register") })
-                        }
-                        composable("ProductListView") {
-                            productViewModel.loadProducts()
-                            ProductsScreen(viewModel = productViewModel)
-                        }
-                        composable("CustomizeProductView") {
-                            val selectedProduct =
-                                productViewModel.selectedProduct.collectAsState().value
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        NavHost(navController = navController, startDestination = "login") {
+                            composable("login") {
+                                LoginScreen(viewModel = loginViewModel,
+                                    onNavigateToRegister = { navController.navigate("register") })
+                            }
+                            composable("ProductListView") {
+                                productViewModel.loadProducts()
+                                ProductsScreen(viewModel = productViewModel)
+                            }
+                            composable("CustomizeProductView") {
+                                val selectedProduct =
+                                    productViewModel.selectedProduct.collectAsState().value
 
-                            if (selectedProduct != null) {
-                                val finalPrice by productViewModel.finalPrice.collectAsState()
-                                val selectedAddons by productViewModel.selectedAddons.collectAsState()
-                                val selectedCustomizations by productViewModel.selectedCustomizations.collectAsState()
+                                if (selectedProduct != null) {
+                                    val finalPrice by productViewModel.finalPrice.collectAsState()
+                                    val selectedAddons by productViewModel.selectedAddons.collectAsState()
+                                    val selectedCustomizations by productViewModel.selectedCustomizations.collectAsState()
 
-                                CustomizeProductScreen(
-                                    device = selectedProduct,
-                                    finalPrice = finalPrice,
-                                    onAddonToggle = { addon -> productViewModel.onAddonToggle(addon) },
-                                    onCancelClick = { productViewModel.onCancelCustomization() },
-                                    onCustomizationChange = { customization, option ->
-                                        productViewModel.onCustomizationChange(
-                                            customization, option
-                                        )
-                                    },
-                                    onPurchaseClick = {
-                                        cartViewModel.addItemToCart(
-                                            CartItem(
-                                                id = selectedProduct.id,
-                                                name = selectedProduct.nombre,
-                                                price = finalPrice,
-                                                quantity = 1
+                                    CustomizeProductScreen(
+                                        device = selectedProduct,
+                                        finalPrice = finalPrice,
+                                        onAddonToggle = { addon -> productViewModel.onAddonToggle(addon) },
+                                        onCancelClick = { productViewModel.onCancelCustomization() },
+                                        onCustomizationChange = { customization, option ->
+                                            productViewModel.onCustomizationChange(
+                                                customization, option
                                             )
-                                        )
-                                    },
-                                    onAddClick = {
-                                        cartViewModel.addItemToCart(
-                                            CartItem(
-                                                id = selectedProduct.id,
-                                                name = selectedProduct.nombre,
-                                                price = finalPrice,
-                                                quantity = 1
+                                        },
+                                        onPurchaseClick = {
+                                            cartViewModel.addItemToCart(
+                                                CartItem(
+                                                    id = selectedProduct.id,
+                                                    name = selectedProduct.nombre,
+                                                    price = finalPrice,
+                                                    quantity = 1
+                                                )
                                             )
-                                        )
-                                    },
-                                    selectedAddons = selectedAddons,
-                                    selectedCustomizations = selectedCustomizations
+                                        },
+                                        onAddClick = {
+                                            cartViewModel.addItemToCart(
+                                                CartItem(
+                                                    id = selectedProduct.id,
+                                                    name = selectedProduct.nombre,
+                                                    price = finalPrice,
+                                                    quantity = 1
+                                                )
+                                            )
+                                        },
+                                        selectedAddons = selectedAddons,
+                                        selectedCustomizations = selectedCustomizations
+                                    )
+                                }
+                            }
+                            composable("register") {
+                                RegisterScreen(viewModel = registerViewModel,
+                                    onNavigateToLogin = { navController.navigate("login") })
+                            }
+                        }
+
+                        val isCartVisible by cartViewModel.isCartVisible.collectAsState()
+                        if (isCartVisible) {
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.TopEnd)
+                                    .height(500.dp)
+                                    .width(250.dp)
+                                    .padding(4.dp)
+                                    .background(Color.White)
+                                    .border(3.dp, BackgroundColorBlue)
+
+                            ) {
+                                CartShoppScreen(
+                                    Modifier
+                                        .align(Alignment.TopCenter)
+                                        .padding(top = 4.dp)
                                 )
                             }
                         }
-                        composable("register") {
-                            RegisterScreen(viewModel = registerViewModel,
-                                onNavigateToLogin = { navController.navigate("login") })
-                        }
+
+                        NavigationEffects(loginViewModel, productViewModel, navController)
                     }
-
-                    val isCartVisible by cartViewModel.isCartVisible.collectAsState()
-                    if (isCartVisible) {
-                        Box(
-                            modifier = Modifier
-                                .align(Alignment.TopEnd)
-                                .height(500.dp)
-                                .width(250.dp)
-                                .padding(4.dp)
-                                .background(Color.White)
-                                .border(3.dp, BackgroundColorBlue)
-
-                        ) {
-                            CartShoppScreen(
-                                Modifier
-                                    .align(Alignment.TopCenter)
-                                    .padding(top = 4.dp)
-                            )
-                        }
-                    }
-
-                    NavigationEffects(loginViewModel, productViewModel, navController)
                 }
-            })
+            )
         }
     }
 }
