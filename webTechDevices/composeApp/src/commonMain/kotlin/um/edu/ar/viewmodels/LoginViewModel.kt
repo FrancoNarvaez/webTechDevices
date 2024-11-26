@@ -1,8 +1,8 @@
-package um.edu.ar.ui.login
+package um.edu.ar.viewmodels
 
-import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import androidx.lifecycle.ViewModel
 
 class LoginViewModel : ViewModel() {
     private val _email = MutableStateFlow("")

@@ -36,6 +36,7 @@ import um.edu.ar.ui.theme.DarkBlue
 import um.edu.ar.ui.theme.DisabledColor
 import um.edu.ar.ui.theme.LightBlue
 import um.edu.ar.ui.theme.MegaLightBlue
+import um.edu.ar.viewmodels.RegisterViewModel
 
 @Composable
 fun RegisterScreen(viewModel: RegisterViewModel, onNavigateToLogin: () -> Unit) {

@@ -1,9 +1,9 @@
-package um.edu.ar.ui.cartshopp
+package um.edu.ar.viewmodels
 
-import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import um.edu.ar.clases.CartItem
+import androidx.lifecycle.ViewModel
 
 class CartViewModel : ViewModel() {
     private val _isCartVisible = MutableStateFlow(false)
@@ -29,8 +29,6 @@ class CartViewModel : ViewModel() {
     }
 
     fun buyAllItems() {
-        // Implement the logic to process the purchase of all items in the cart
-        // For example, send the cart items to a backend service
         _cartItems.value = emptyList() // Clear the cart after purchase
     }
 }

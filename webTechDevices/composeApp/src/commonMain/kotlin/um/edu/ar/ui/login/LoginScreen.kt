@@ -3,24 +3,10 @@ package um.edu.ar.ui.login
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -31,15 +17,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import org.jetbrains.compose.resources.painterResource
-import um.edu.ar.ui.theme.BackgroundColorBlue
-import um.edu.ar.ui.theme.BlueLinksColor
-import um.edu.ar.ui.theme.DarkBlue
-import um.edu.ar.ui.theme.DisabledColor
-import um.edu.ar.ui.theme.LightBlue
-import um.edu.ar.ui.theme.MegaLightBlue
-import webtechdevices.composeapp.generated.resources.Res
-import webtechdevices.composeapp.generated.resources.logoappremove3
+import um.edu.ar.ui.theme.*
+import um.edu.ar.utilidadFN.loadImage
+import um.edu.ar.viewmodels.LoginViewModel
 
 @Composable
 fun LoginScreen(viewModel: LoginViewModel, onNavigateToRegister: () -> Unit) {
@@ -113,12 +93,11 @@ fun Title(modifier: Modifier) {
 @Composable
 fun LogoImageCompany() {
     Image(
-        painter = painterResource(Res.drawable.logoappremove3),
+        painter = loadImage("icons8_logo_app"),
         contentDescription = "Header Image",
         Modifier.size(130.dp)
     )
 }
-
 
 @Composable
 fun NameCompany() {
@@ -126,7 +105,6 @@ fun NameCompany() {
         "Web Tech Devices", style = MaterialTheme.typography.h4, color = Color(LightBlue.value)
     )
 }
-
 
 @Composable
 fun FieldsToComplete(viewModel: LoginViewModel) {
@@ -153,10 +131,8 @@ fun EmailField(email: String, onTextFieldChange: (String) -> Unit) {
             backgroundColor = Color(MegaLightBlue.value),
             focusedIndicatorColor = Color(DarkBlue.value),
         )
-
     )
 }
-
 
 @Composable
 fun PasswordField(password: String, onTextFieldChange: (String) -> Unit) {
@@ -202,7 +178,6 @@ fun CreateNewAccountLink(onNavigateToRegister: () -> Unit) {
     )
 }
 
-
 @Composable
 fun LoginButton(loginEnabled: Boolean, onLoginSelected: () -> Unit) {
     Button(
@@ -219,6 +194,3 @@ fun LoginButton(loginEnabled: Boolean, onLoginSelected: () -> Unit) {
         Text("Login")
     }
 }
-
-
-

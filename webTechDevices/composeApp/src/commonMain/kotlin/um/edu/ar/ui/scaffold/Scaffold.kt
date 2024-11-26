@@ -1,6 +1,5 @@
 package um.edu.ar.ui.scaffold
 
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.compose.foundation.Image
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
@@ -13,33 +12,27 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import um.edu.ar.ui.cartshopp.CartViewModel
-import um.edu.ar.ui.product.ProductViewModel
+import um.edu.ar.viewmodels.CartViewModel
+import um.edu.ar.viewmodels.ProductViewModel
 import um.edu.ar.ui.theme.*
-import webtechdevices.composeapp.generated.resources.Res
-import webtechdevices.composeapp.generated.resources.icons8_back_96
-import webtechdevices.composeapp.generated.resources.icons8_shopping_cart_48
+import um.edu.ar.utilidadFN.loadImage
 
 @Composable
-fun TopAppBar() {
-    val productViewModel: ProductViewModel = viewModel()
-    val cartViewModel: CartViewModel = viewModel()
-
-
+fun TopAppBar(productViewModel: ProductViewModel, cartViewModel: CartViewModel) {
     TopAppBar(
         title = { Text(text = "Web Tech Devices", color = Color(MegaLightBlue.value)) },
         backgroundColor = Color(BackgoundLightBlue.value),
         actions = {
             IconButton(onClick = { cartViewModel.onCartButtonClick() }) {
                 Image(
-                    painter = org.jetbrains.compose.resources.painterResource(Res.drawable.icons8_shopping_cart_48),
+                    painter = loadImage("icons8_shopping_cart_48"),
                     contentDescription = "Cart"
                 )
             }
 
             IconButton(onClick = { productViewModel.onBackButtonClick() }) {
                 Image(
-                    painter = org.jetbrains.compose.resources.painterResource(Res.drawable.icons8_back_96),
+                    painter = loadImage("icons8_back_arrow_48"),
                     contentDescription = "Back"
                 )
             }
@@ -49,10 +42,10 @@ fun TopAppBar() {
 
 @Composable
 fun BottomNavigationBar(currentRoute: String?, navigate: (String) -> Unit) {
-    BottomNavigation (
+    BottomNavigation(
         backgroundColor = Color(BackgoundLightBlue.value),
         contentColor = Color(BlueLinksColor.value)
-    ){
+    ) {
         BottomNavigationItem(
             icon = { Icon(Icons.AutoMirrored.Filled.List, contentDescription = "Products") },
             selected = currentRoute == "ProductListView",

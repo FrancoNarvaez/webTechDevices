@@ -1,8 +1,8 @@
-package um.edu.ar.ui.register
+package um.edu.ar.viewmodels
 
-import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import androidx.lifecycle.ViewModel
 
 class RegisterViewModel : ViewModel() {
     private val _email = MutableStateFlow("")
@@ -20,7 +20,6 @@ class RegisterViewModel : ViewModel() {
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
-
     fun onRegisterChanged(email: String, password: String, confirmPassword: String) {
         _email.value = email
         _password.value = password
@@ -31,5 +30,4 @@ class RegisterViewModel : ViewModel() {
     private fun isValidEmail(email: String): Boolean = email.contains("@") && email.contains(".")
 
     private fun isValidPassword(password: String): Boolean = password.length >= 6
-
 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import um.edu.ar.clases.Device
 import um.edu.ar.ui.theme.*
+import um.edu.ar.viewmodels.ProductViewModel
 
 @Composable
 fun ProductsScreen(viewModel: ProductViewModel) {
