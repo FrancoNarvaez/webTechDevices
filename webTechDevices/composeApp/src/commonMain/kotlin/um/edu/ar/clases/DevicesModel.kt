@@ -45,5 +45,15 @@ data class CartItem(
     val id: Int,
     val name: String,
     val price: Double,
-    val quantity: Int
+    val quantity: Int,
+    val customizations: Map<String, OpcionPersonalizacion>,
+    val addons: List<Adicional>
+)
+
+data class VentasItems(
+    val id: Int,
+    val productName: String,
+    val quantity: Int,
+    val totalPrice: Double,
+    val date: String
 )

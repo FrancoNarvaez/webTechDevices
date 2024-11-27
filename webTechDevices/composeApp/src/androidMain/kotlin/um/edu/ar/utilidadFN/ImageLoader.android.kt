@@ -12,6 +12,7 @@ actual fun loadImage(resourceName: String): Painter {
         "icons8_close_window_48" -> R.drawable.cross
         "icons8_logo_app" -> R.drawable.logoappremove3
         "icons8_back_arrow_48" -> R.drawable.icons8_back_96
+        "icons8_bill_96" -> R.drawable.icons8_bill_96
         else -> throw IllegalArgumentException("Unknown resource name")
     }
     return painterResource(id = resourceId)

@@ -46,7 +46,7 @@ fun ProductsScreen(viewModel: ProductViewModel) {
 }
 
 @Composable
-fun ProductListView(products: List<Device>, onSelectProduct: (Device) -> Unit) {
+fun ProductListView(products: List<Device>, onProductSelected: (Device) -> Unit) {
     LazyColumn {
         items(products.size) { index ->
             val product = products[index]
@@ -55,7 +55,7 @@ fun ProductListView(products: List<Device>, onSelectProduct: (Device) -> Unit) {
                     Text(text = product.nombre, style = MaterialTheme.typography.h6)
                     Text(text = product.descripcion, style = MaterialTheme.typography.body2)
                     Text(text = "Precio base: ${product.precioBase} ${product.moneda}")
-                    Button(onClick = { onSelectProduct(product) }, colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)) {
+                    Button(onClick = { onProductSelected(product) }, colors = ButtonDefaults.buttonColors(backgroundColor = BackgroundColorBlue)) {
                         Text("Seleccionar")
                     }
                 }

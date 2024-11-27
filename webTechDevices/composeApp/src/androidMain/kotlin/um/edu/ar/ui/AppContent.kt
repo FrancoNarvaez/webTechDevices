@@ -1,5 +1,6 @@
 package um.edu.ar.ui
 
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,10 +33,12 @@ import um.edu.ar.ui.register.RegisterScreen
 import um.edu.ar.ui.scaffold.BottomNavigationBar
 import um.edu.ar.ui.scaffold.TopAppBar
 import um.edu.ar.ui.theme.BackgroundColorBlue
+import um.edu.ar.ui.ventas.VentasViewScreen
 import um.edu.ar.viewmodels.CartViewModel
 import um.edu.ar.viewmodels.LoginViewModel
 import um.edu.ar.viewmodels.ProductViewModel
 import um.edu.ar.viewmodels.RegisterViewModel
+import um.edu.ar.viewmodels.VentasViewModel
 
 @Composable
 fun AppContent() {
@@ -44,13 +47,15 @@ fun AppContent() {
     val productViewModel: ProductViewModel = viewModel()
     val cartViewModel: CartViewModel = viewModel()
     val registerViewModel: RegisterViewModel = viewModel()
+    val ventasViewModel: VentasViewModel = viewModel()
 
     MainScreen(
         navController = navController,
         loginViewModel = loginViewModel,
         productViewModel = productViewModel,
         cartViewModel = cartViewModel,
-        registerViewModel = registerViewModel
+        registerViewModel = registerViewModel,
+        ventasViewModel = ventasViewModel
     )
 }
 
@@ -60,40 +65,53 @@ fun MainScreen(
     loginViewModel: LoginViewModel,
     productViewModel: ProductViewModel,
     cartViewModel: CartViewModel,
-    registerViewModel: RegisterViewModel
+    registerViewModel: RegisterViewModel,
+    ventasViewModel: VentasViewModel
 ) {
     NavigationEffects(loginViewModel, productViewModel, navController)
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
 
-    Scaffold(
-        topBar = { TopAppBar(productViewModel, cartViewModel) },
-        bottomBar = { BottomNavigationBar(currentRoute) { route -> navController.navigate(route) } }
-    ) { paddingValues ->
-        Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-            NavigationHost(
-                navController = navController,
-                loginViewModel = loginViewModel,
-                productViewModel = productViewModel,
-                cartViewModel = cartViewModel,
-                registerViewModel = registerViewModel
-            )
+    if (currentRoute == "login") {
+        NavigationHost(
+            navController = navController,
+            loginViewModel = loginViewModel,
+            productViewModel = productViewModel,
+            cartViewModel = cartViewModel,
+            registerViewModel = registerViewModel,
+            ventasViewModel = ventasViewModel
+        )
+    } else {
+        Scaffold(
+            topBar = { TopAppBar(productViewModel, cartViewModel) },
+            bottomBar = { BottomNavigationBar(currentRoute) { route -> navController.navigate(route) } }
+        ) { paddingValues ->
+            Box(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
+                NavigationHost(
+                    navController = navController,
+                    loginViewModel = loginViewModel,
+                    productViewModel = productViewModel,
+                    cartViewModel = cartViewModel,
+                    registerViewModel = registerViewModel,
+                    ventasViewModel = ventasViewModel
+                )
 
-            val isCartVisible by cartViewModel.isCartVisible.collectAsState()
-            if (isCartVisible) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .height(500.dp)
-                        .width(250.dp)
-                        .padding(4.dp)
-                        .background(Color.White)
-                        .border(3.dp, BackgroundColorBlue)
-                ) {
-                    CartShoppScreen(
-                        cartViewModel,
-                        Modifier
-                    )
+                val isCartVisible by cartViewModel.isCartVisible.collectAsState()
+                if (isCartVisible) {
+                    Box(
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .height(500.dp)
+                            .width(250.dp)
+                            .padding(4.dp)
+                            .background(Color.White)
+                            .border(3.dp, BackgroundColorBlue)
+                    ) {
+                        CartShoppScreen(
+                            cartViewModel,
+                            Modifier
+                        )
+                    }
                 }
             }
         }
@@ -106,13 +124,14 @@ fun NavigationHost(
     loginViewModel: LoginViewModel,
     productViewModel: ProductViewModel,
     cartViewModel: CartViewModel,
-    registerViewModel: RegisterViewModel
+    registerViewModel: RegisterViewModel,
+    ventasViewModel: VentasViewModel
 ) {
     NavHost(navController, startDestination = "login") {
         composable("login") {
             LoginScreen(loginViewModel, onNavigateToRegister = { navController.navigate("register") })
         }
-        composable("products") {
+        composable("ProductListView") {
             ProductsScreen(productViewModel)
         }
         composable("customizeProduct") {
@@ -124,9 +143,9 @@ fun NavigationHost(
                     selectedCustomizations = productViewModel.selectedCustomizations.collectAsState().value,
                     onCustomizationChange = productViewModel::onCustomizationChange,
                     selectedAddons = productViewModel.selectedAddons.collectAsState().value,
-                    onAddonToggle = productViewModel::onAddonToggle,
-                    onPurchaseClick = { /* Handle purchase click */ },
-                    onAddClick = { /* Handle add to cart click */ },
+                    onAddonToggle = { addon -> productViewModel.onAddonToggle(addon) },
+                    onPurchaseClick = { productViewModel.onPurchaseClick(cartViewModel) },
+                    onAddClick = { productViewModel.onAddClick(cartViewModel) },
                     onCancelClick = productViewModel::onCancelCustomization
                 )
             }
@@ -134,9 +153,11 @@ fun NavigationHost(
         composable("register") {
             RegisterScreen(registerViewModel, onNavigateToLogin = { navController.navigate("login") })
         }
+        composable("VentasView") {
+            VentasViewScreen(ventasViewModel)
+        }
     }
 }
-
 @Composable
 fun NavigationEffects(
     loginViewModel: LoginViewModel, productViewModel: ProductViewModel, navController: NavController
@@ -156,12 +177,13 @@ fun NavigationEffects(
     LaunchedEffect(productState) {
         snapshotFlow { productState }.collect { state ->
             if (state == "CustomizeProductView") {
-                navController.navigate("CustomizeProductView")
+                navController.navigate("customizeProduct")
             } else if (state == "ProductListView") {
                 navController.navigate("ProductListView") {
-                    popUpTo("CustomizeProductView") { inclusive = true }
+                    popUpTo("customizeProduct") { inclusive = true }
                 }
             }
         }
     }
 }
+

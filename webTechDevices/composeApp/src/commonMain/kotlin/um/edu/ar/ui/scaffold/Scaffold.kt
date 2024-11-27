@@ -9,6 +9,8 @@ import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.filled.AccountBox
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -54,9 +56,9 @@ fun BottomNavigationBar(currentRoute: String?, navigate: (String) -> Unit) {
             unselectedContentColor = Color.White
         )
         BottomNavigationItem(
-            icon = { Icon(Icons.Filled.ShoppingCart, contentDescription = "Sales") },
-            selected = currentRoute == "SalesView",
-            onClick = { navigate("SalesView") },
+            icon = { Icon(Icons.Default.Info, contentDescription = "Bill") },
+            selected = currentRoute == "VentasView",
+            onClick = { navigate("VentasView") },
             selectedContentColor = Color.White,
             unselectedContentColor = Color.White
         )
