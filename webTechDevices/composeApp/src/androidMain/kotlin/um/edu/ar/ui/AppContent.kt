@@ -158,6 +158,8 @@ fun NavigationHost(
         }
     }
 }
+
+
 @Composable
 fun NavigationEffects(
     loginViewModel: LoginViewModel, productViewModel: ProductViewModel, navController: NavController

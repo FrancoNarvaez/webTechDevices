@@ -15,9 +15,9 @@
 
 logging:
   level:
-    ROOT: INFO
-    tech.jhipster: INFO
-    um.edu.ar: INFO
+    ROOT: debug
+    tech.jhipster: debug
+    um.edu.ar: debug
 
 management:
   prometheus:
@@ -47,6 +47,7 @@ spring:
   # Replace by 'prod, faker' to add the faker context and have sample data loaded in production
   liquibase:
     contexts: prod
+    drop-first: true
   mail:
     host: localhost
     port: 25
@@ -81,6 +82,11 @@ server:
     enabled: true
     mime-types: text/html,text/xml,text/plain,text/css,application/javascript,application/json,image/svg+xml
     min-response-size: 1024
+
+external:
+  api:
+    base-url: http://10.145.1.1:8080/api
+    token: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJmcmFuY29uYXJ2YWV6IiwiZXhwIjoxNzM3NjU5MzkyLCJhdXRoIjoiUk9MRV9VU0VSIiwiaWF0IjoxNzI5MDE5MzkyfQ.cRE4elLkVzDJXtbKawRwu_I1H99IigG_h5lKbgcDMv2jHRg7MWO3WCzyD558pc-rWRhXjUQT3y_o4XXM7NyHZw
 
 # ===================================================================
 # JHipster specific properties

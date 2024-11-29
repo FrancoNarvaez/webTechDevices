@@ -4,7 +4,11 @@ import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
+
+import um.edu.ar.domain.Adicional;
+import um.edu.ar.domain.Opcion;
 
 /**
  * A DTO for the {@link um.edu.ar.domain.Venta} entity.
@@ -15,7 +19,13 @@ public class VentaDTO implements Serializable {
     private Long id;
 
     @NotNull
-    private Long idVentaProfe;
+    private Long idVenta;
+
+    private Long idDispositivo;
+
+    private List<Opcion> personalizaciones;
+
+    private List<Adicional> adicionales;
 
     private String descripcion;
 
@@ -32,12 +42,36 @@ public class VentaDTO implements Serializable {
         this.id = id;
     }
 
-    public Long getIdVentaProfe() {
-        return idVentaProfe;
+    public Long getIdVenta() {
+        return idVenta;
     }
 
-    public void setIdVentaProfe(Long idVentaProfe) {
-        this.idVentaProfe = idVentaProfe;
+    public void setIdVenta(Long idVenta) {
+        this.idVenta = idVenta;
+    }
+
+    public Long getIdDispositivo() {
+        return idDispositivo;
+    }
+
+    public void setIdDispositivo(Long idDispositivo) {
+        this.idDispositivo = idDispositivo;
+    }
+
+    public List<Opcion> getPersonalizaciones() {
+        return personalizaciones;
+    }
+
+    public void setpersonalizaciones(List<Opcion> personalizaciones) {
+        this.personalizaciones = personalizaciones;
+    }
+
+    public List<Adicional> getAdicionales() {
+        return adicionales;
+    }
+
+    public void setadicionales(List<Adicional> adicionaleses) {
+        this.adicionales = adicionaleses;
     }
 
     public String getDescripcion() {
@@ -90,10 +124,14 @@ public class VentaDTO implements Serializable {
     public String toString() {
         return "VentaDTO{" +
             "id=" + getId() +
-            ", idVentaProfe=" + getIdVentaProfe() +
+            ", idVenta=" + getIdVenta() +
+            ", idDispositivo=" + getIdDispositivo() +
+            ", personalizaciones=" + getPersonalizaciones() +
+            ", adicionales=" + getAdicionales() +
             ", descripcion='" + getDescripcion() + "'" +
             ", preciofinal=" + getPreciofinal() +
             ", fecha='" + getFecha() + "'" +
             "}";
     }
+
 }

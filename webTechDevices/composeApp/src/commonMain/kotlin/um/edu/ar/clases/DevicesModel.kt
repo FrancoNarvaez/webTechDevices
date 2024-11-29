@@ -38,7 +38,7 @@ data class Adicional(
     val nombre: String,
     val descripcion: String,
     val precio: Double,
-    val precioGratis: Double // -1 si no tiene promoción
+    val precioGratis: Double
 )
 
 data class CartItem(

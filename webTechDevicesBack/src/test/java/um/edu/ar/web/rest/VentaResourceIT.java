@@ -464,6 +464,7 @@ class VentaResourceIT {
         assertDecrementedRepositoryCount(databaseSizeBeforeDelete);
     }
 
+
     protected long getRepositoryCount() {
         return ventaRepository.count();
     }

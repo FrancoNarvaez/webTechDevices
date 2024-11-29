@@ -9,6 +9,8 @@ public class RestTemplateConfig {
 
     @Bean
     public RestTemplate restTemplate() {
-        return new RestTemplate();
+        return new RestTemplate(); // editado
     }
+
+    // Tener en cuenta que falta agregar el token
 }

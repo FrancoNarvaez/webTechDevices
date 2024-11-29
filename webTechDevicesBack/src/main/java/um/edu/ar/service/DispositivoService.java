@@ -1,5 +1,6 @@
 package um.edu.ar.service;
 
+import java.util.List;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,11 +22,14 @@ public class DispositivoService {
 
     private static final Logger LOG = LoggerFactory.getLogger(DispositivoService.class);
 
+    private final CatedraService catedraService;
+
     private final DispositivoRepository dispositivoRepository;
 
     private final DispositivoMapper dispositivoMapper;
 
-    public DispositivoService(DispositivoRepository dispositivoRepository, DispositivoMapper dispositivoMapper) {
+    public DispositivoService(CatedraService catedraService, DispositivoRepository dispositivoRepository, DispositivoMapper dispositivoMapper) {
+        this.catedraService = catedraService;
         this.dispositivoRepository = dispositivoRepository;
         this.dispositivoMapper = dispositivoMapper;
     }
@@ -108,5 +112,9 @@ public class DispositivoService {
     public void delete(Long id) {
         LOG.debug("Request to delete Dispositivo : {}", id);
         dispositivoRepository.deleteById(id);
+    }
+
+    public List<DispositivoDTO> fetchExternalDispositivos() {
+        return catedraService.getDispositivos();
     }
 }

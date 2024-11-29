@@ -28,7 +28,7 @@ import um.edu.ar.web.rest.errors.BadRequestAlertException;
  * REST controller for managing {@link um.edu.ar.domain.Dispositivo}.
  */
 @RestController
-@RequestMapping("/api/dispositivos")
+@RequestMapping("/api/catedra/dispositivos")
 public class DispositivoResource {
 
     private static final Logger LOG = LoggerFactory.getLogger(DispositivoResource.class);
@@ -47,13 +47,6 @@ public class DispositivoResource {
         this.dispositivoRepository = dispositivoRepository;
     }
 
-    /**
-     * {@code POST  /dispositivos} : Create a new dispositivo.
-     *
-     * @param dispositivoDTO the dispositivoDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new dispositivoDTO, or with status {@code 400 (Bad Request)} if the dispositivo has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PostMapping("")
     public ResponseEntity<DispositivoDTO> createDispositivo(@Valid @RequestBody DispositivoDTO dispositivoDTO) throws URISyntaxException {
         LOG.debug("REST request to save Dispositivo : {}", dispositivoDTO);
@@ -61,21 +54,11 @@ public class DispositivoResource {
             throw new BadRequestAlertException("A new dispositivo cannot already have an ID", ENTITY_NAME, "idexists");
         }
         dispositivoDTO = dispositivoService.save(dispositivoDTO);
-        return ResponseEntity.created(new URI("/api/dispositivos/" + dispositivoDTO.getId()))
+        return ResponseEntity.created(new URI("/api/catedra/dispositivos/" + dispositivoDTO.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, dispositivoDTO.getId().toString()))
             .body(dispositivoDTO);
     }
 
-    /**
-     * {@code PUT  /dispositivos/:id} : Updates an existing dispositivo.
-     *
-     * @param id the id of the dispositivoDTO to save.
-     * @param dispositivoDTO the dispositivoDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated dispositivoDTO,
-     * or with status {@code 400 (Bad Request)} if the dispositivoDTO is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the dispositivoDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PutMapping("/{id}")
     public ResponseEntity<DispositivoDTO> updateDispositivo(
         @PathVariable(value = "id", required = false) final Long id,
@@ -99,17 +82,6 @@ public class DispositivoResource {
             .body(dispositivoDTO);
     }
 
-    /**
-     * {@code PATCH  /dispositivos/:id} : Partial updates given fields of an existing dispositivo, field will ignore if it is null
-     *
-     * @param id the id of the dispositivoDTO to save.
-     * @param dispositivoDTO the dispositivoDTO to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated dispositivoDTO,
-     * or with status {@code 400 (Bad Request)} if the dispositivoDTO is not valid,
-     * or with status {@code 404 (Not Found)} if the dispositivoDTO is not found,
-     * or with status {@code 500 (Internal Server Error)} if the dispositivoDTO couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
     @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
     public ResponseEntity<DispositivoDTO> partialUpdateDispositivo(
         @PathVariable(value = "id", required = false) final Long id,
@@ -135,26 +107,14 @@ public class DispositivoResource {
         );
     }
 
-    /**
-     * {@code GET  /dispositivos} : get all the dispositivos.
-     *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of dispositivos in body.
-     */
-    @GetMapping("")
-    public ResponseEntity<List<DispositivoDTO>> getAllDispositivos(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.debug("REST request to get a page of Dispositivos");
-        Page<DispositivoDTO> page = dispositivoService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
+//    @GetMapping("")
+//    public ResponseEntity<List<DispositivoDTO>> getAllDispositivos(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+//        LOG.debug("REST request to get a page of Dispositivos");
+//        Page<DispositivoDTO> page = dispositivoService.findAll(pageable);
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+//        return ResponseEntity.ok().headers(headers).body(page.getContent());
+//    }
 
-    /**
-     * {@code GET  /dispositivos/:id} : get the "id" dispositivo.
-     *
-     * @param id the id of the dispositivoDTO to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the dispositivoDTO, or with status {@code 404 (Not Found)}.
-     */
     @GetMapping("/{id}")
     public ResponseEntity<DispositivoDTO> getDispositivo(@PathVariable("id") Long id) {
         LOG.debug("REST request to get Dispositivo : {}", id);
@@ -162,12 +122,6 @@ public class DispositivoResource {
         return ResponseUtil.wrapOrNotFound(dispositivoDTO);
     }
 
-    /**
-     * {@code DELETE  /dispositivos/:id} : delete the "id" dispositivo.
-     *
-     * @param id the id of the dispositivoDTO to delete.
-     * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteDispositivo(@PathVariable("id") Long id) {
         LOG.debug("REST request to delete Dispositivo : {}", id);

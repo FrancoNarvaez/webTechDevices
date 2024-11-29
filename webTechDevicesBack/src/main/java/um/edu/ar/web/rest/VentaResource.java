@@ -42,28 +42,22 @@ public class VentaResource {
 
     private final VentaRepository ventaRepository;
 
+
     public VentaResource(VentaService ventaService, VentaRepository ventaRepository) {
         this.ventaService = ventaService;
         this.ventaRepository = ventaRepository;
+
     }
 
     /**
      * {@code POST  /ventas} : Create a new venta.
      *
-     * @param ventaDTO the ventaDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new ventaDTO, or with status {@code 400 (Bad Request)} if the venta has already an ID.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("")
-    public ResponseEntity<VentaDTO> createVenta(@Valid @RequestBody VentaDTO ventaDTO) throws URISyntaxException {
+    public ResponseEntity<VentaDTO> createVenta(@RequestBody VentaDTO ventaDTO) {
         LOG.debug("REST request to save Venta : {}", ventaDTO);
-        if (ventaDTO.getId() != null) {
-            throw new BadRequestAlertException("A new venta cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        ventaDTO = ventaService.save(ventaDTO);
-        return ResponseEntity.created(new URI("/api/ventas/" + ventaDTO.getId()))
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, ventaDTO.getId().toString()))
-            .body(ventaDTO);
+        VentaDTO result = ventaService.save(ventaDTO);
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -138,15 +132,13 @@ public class VentaResource {
     /**
      * {@code GET  /ventas} : get all the ventas.
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of ventas in body.
+     *
      */
     @GetMapping("")
-    public ResponseEntity<List<VentaDTO>> getAllVentas(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
-        LOG.debug("REST request to get a page of Ventas");
-        Page<VentaDTO> page = ventaService.findAll(pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    public ResponseEntity<List<VentaDTO>> getAllVentas() {
+        LOG.debug("REST request to get all Ventas");
+        List<VentaDTO> result = ventaService.getVentas();
+        return ResponseEntity.ok(result);
     }
 
     /**
@@ -156,10 +148,10 @@ public class VentaResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the ventaDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/{id}")
-    public ResponseEntity<VentaDTO> getVenta(@PathVariable("id") Long id) {
+    public ResponseEntity<VentaDTO> getVenta(@PathVariable Long id) {
         LOG.debug("REST request to get Venta : {}", id);
-        Optional<VentaDTO> ventaDTO = ventaService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(ventaDTO);
+        VentaDTO result = ventaService.getVentaById(id);
+        return ResponseEntity.ok(result);
     }
 
     /**
